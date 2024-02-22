@@ -36,7 +36,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     list = { title };
   } catch (e) {
     return {
-      error: "Failed to create.",
+      error: "Failed to update.",
     };
   }
 

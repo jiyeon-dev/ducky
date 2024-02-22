@@ -23,7 +23,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     result = 1;
   } catch (e) {
     return {
-      error: "Failed to create.",
+      error: "Failed to delete.",
     };
   }
 

@@ -2,18 +2,10 @@ import { Card, List } from "@/types";
 import { ActionState, fieldTypeChecker } from "@/lib/fieldTypeChecker";
 import {
   Timestamp,
-  addDoc,
   arrayUnion,
-  collection,
   doc,
   getDoc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  serverTimestamp,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import { z } from "zod";
 import { db } from "@/lib/firebase";

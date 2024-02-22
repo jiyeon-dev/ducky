@@ -9,9 +9,10 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useEffect, useState } from "react";
+import { List } from "@/types";
 
 export default function StoragePage() {
-  const [lists, setLists] = useState<QueryDocumentSnapshot[]>([]);
+  const [lists, setLists] = useState<List[]>([]);
   console.log("---------rerender");
   useEffect(() => {
     const q = query(
@@ -21,7 +22,10 @@ export default function StoragePage() {
     );
 
     onSnapshot(q, (doc) => {
-      setLists(doc.docs);
+      const data = doc.docs.map(
+        (item) => ({ ...item.data(), id: item.id } as List)
+      );
+      setLists(data);
     });
   }, []);
 
@@ -41,10 +45,8 @@ export default function StoragePage() {
 
       {/* body */}
       <div className='p-4 h-full overflow-x-auto'>
-        <Kanban data={lists} />
+        <Kanban data={lists} boardId='ducky' />
       </div>
     </div>
   );
 }
-
-export const loader = async ({ request }: { request: Request }) => {};
