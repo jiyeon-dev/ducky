@@ -3,38 +3,41 @@ import React, {
   KeyboardEventHandler,
   ChangeEvent,
   useEffect,
+  forwardRef,
 } from "react";
-import { useOnClickOutside, useEventListener } from "usehooks-ts";
+import { useEventListener, useOnClickOutside } from "usehooks-ts";
 import { toast } from "sonner";
-import { Plus, X } from "lucide-react";
 import { useAction } from "@/hooks/useAction";
 import { createCard } from "@/actions/kanban/createCard";
-import { Button } from "@/components/ui/button";
 import { FormTextarea } from "./form/formTextarea";
-import { FormSubmit } from "./form/formSubmit";
 import { useLocation } from "react-router-dom";
+import { FormSubmit } from "./form/formSubmit";
+import { Button } from "../ui/button";
+import { X } from "lucide-react";
 
 interface CardFormProps {
   listId: string;
   boardId: string;
   isEditing: boolean;
-  enableEditing: () => void;
   disableEditing: () => void;
+  onListScrollToBottom: () => void;
 }
 
 export const CardForm = ({
   listId,
   boardId,
-  enableEditing,
   disableEditing,
   isEditing,
+  onListScrollToBottom,
 }: CardFormProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const location = useLocation();
 
   useEffect(() => {
-    if (isEditing) textareaRef.current?.focus();
+    if (isEditing) {
+      textareaRef.current?.focus();
+    }
   }, [isEditing]);
 
   const { execute, fieldErrors } = useAction(createCard, {
@@ -49,9 +52,13 @@ export const CardForm = ({
   });
 
   const onTextareaInput = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    // textarea 높이 조절
     const self = event.target as HTMLTextAreaElement;
     self.style.height = `auto`;
     if (self.scrollHeight > 52) self.style.height = `${self.scrollHeight}px`;
+
+    // 리스트 스크롤 맨 밑으로 이동
+    onListScrollToBottom();
   };
 
   const onKeyDown = (e: KeyboardEvent) => {
@@ -85,48 +92,28 @@ export const CardForm = ({
   useOnClickOutside(formRef, disableEditing);
   useEventListener("keydown", onKeyDown);
 
-  if (isEditing) {
-    return (
-      <form
-        ref={formRef}
-        onSubmit={handleSubmit}
-        className='m1 py-0.5 px-1 space-y-2'
-      >
-        <FormTextarea
-          id='title'
-          onKeyDown={onTextareaKeyDown}
-          onInput={onTextareaInput}
-          ref={textareaRef}
-          placeholder='Enter a title for this card...'
-          className='resize-none overflow-y-hidden h-auto min-h-5 pb-6'
-          errors={fieldErrors}
-        />
-        <div className='flex items-center gap-x-1'>
-          <FormSubmit className='h-8'>Add card</FormSubmit>
-          <Button
-            onClick={disableEditing}
-            size='sm'
-            variant='ghost'
-            className='h-8'
-          >
-            <X className='h-5 w-5' />
-          </Button>
-        </div>
-      </form>
-    );
-  }
-
   return (
-    <div className='pt-2 px-2'>
-      <Button
-        onClick={enableEditing}
-        className='h-auto px-2 py-1.5 w-full justify-start text-muted-foreground text-sm'
-        size='sm'
-        variant='ghost'
-      >
-        <Plus className='h-4 w-4 mr-2' />
-        Add a card
-      </Button>
-    </div>
+    <form ref={formRef} onSubmit={handleSubmit} className='py-0.5 space-y-2'>
+      <FormTextarea
+        id='title'
+        onKeyDown={onTextareaKeyDown}
+        onInput={onTextareaInput}
+        ref={textareaRef}
+        placeholder='Enter a title for this card...'
+        className='resize-none overflow-y-hidden h-auto min-h-5 pb-6'
+        errors={fieldErrors}
+      />
+      <div className='flex items-center gap-x-1'>
+        <FormSubmit className='h-8'>Add card</FormSubmit>
+        <Button
+          onClick={disableEditing}
+          size='sm'
+          variant='ghost'
+          className='h-8'
+        >
+          <X className='h-5 w-5' />
+        </Button>
+      </div>
+    </form>
   );
 };

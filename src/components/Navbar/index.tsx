@@ -11,7 +11,7 @@ export default function Navbar() {
   return (
     <nav
       className={cn(
-        "z-50 fixed bg-background first-line:top-0 flex items-center w-full py-5 px-6 justify-between",
+        "z-50 fixed bg-background top-0 flex items-center w-dvw	container py-5 px-6 justify-between",
         scrolled && "border-b shadow-sm"
       )}
     >

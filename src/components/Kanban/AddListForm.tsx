@@ -71,7 +71,7 @@ export const AddListForm = () => {
         <FormInput
           ref={inputRef}
           id='title'
-          className='text-sm px-2 py-1 h-7 font-medium border-transparent hover:border-input focus:border-input transition'
+          className='text-sm px-2 py-1 h-7 font-medium border-transparent hover:border-input focus:border-input bg-[var(--kanban-list-bg)] transition'
           placeholder='Enter list title...'
           errors={fieldErrors}
         />
@@ -104,7 +104,7 @@ export const AddListForm = () => {
     <li
       className={cn(
         "shrink-0 h-fit w-[272px] select-none rounded-md",
-        isEditing ? "bg-[var(--kanban-bg)]" : ""
+        isEditing ? "bg-[var(--kanban-list-bg)]" : ""
       )}
     >
       {content}

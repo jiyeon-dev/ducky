@@ -34,7 +34,7 @@ export default function StoragePage() {
       {/* Title */}
       <div className='container flex items-center justify-center py-2 gap-2'>
         <div className='flex flex-col text-center'>
-          <h1 className='text-6xl font-bold font-[TTHakgyoansimMulgyeolB]'>
+          <h1 className='sm:text-6xl text-4xl font-bold font-[TTHakgyoansimMulgyeolB]'>
             고무오리 저장소
           </h1>
           <span className='text-gray-500 text-sm mt-3 font-[GmarketSansMedium]'>

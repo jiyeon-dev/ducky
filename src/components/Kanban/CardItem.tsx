@@ -17,7 +17,7 @@ export const CardItem = ({ data, index }: CardItemProps) => {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
           role='button'
-          className='truncate border-2 border-transparent bg-[var(--kanban-bg)] hover:border-[var(--kanban-border-focus)] text-[var(--kanban-text)] py-2 px-3 text-sm rounded-md shadow-sm'
+          className='w-[256px] truncate border-2 border-transparent bg-[var(--kanban-bg)] hover:border-[var(--kanban-border-focus)] text-[var(--kanban-text)] py-2 px-3 text-sm rounded-md shadow-sm h-min-[40px]'
         >
           {data.title}
         </div>

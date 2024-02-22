@@ -22,6 +22,9 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
 
   const enableEditing = () => {
     setIsEditing(true);
+    setTimeout(() => {
+      inputRef.current?.focus();
+    });
   };
 
   const disableEditing = () => {
@@ -81,7 +84,7 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
       ) : (
         <div
           onClick={enableEditing}
-          className='w-full text-sm px-2.5 py-1 h-7 font-medium border-transparent'
+          className='w-full text-sm px-2.5 py-1 h-7 font-bold border-transparent'
         >
           {title}
         </div>
