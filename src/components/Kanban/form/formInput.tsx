@@ -4,21 +4,14 @@ import { forwardRef } from "react";
 
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Input, InputProps } from "@/components/ui/input";
 
 import { FormErrors } from "./formErrors";
 
-interface FormInputProps {
+interface FormInputProps extends InputProps {
   id: string;
   label?: string;
-  type?: string;
-  placeholder?: string;
-  required?: boolean;
-  disabled?: boolean;
   errors?: Record<string, string[] | undefined>;
-  className?: string;
-  defaultValue?: string;
-  onBlur?: () => void;
 }
 
 export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
@@ -34,6 +27,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       className,
       defaultValue = "",
       onBlur,
+      ...props
     },
     ref
   ) => {
@@ -63,6 +57,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               className
             )}
             aria-describedby={`${id}-error`}
+            {...props}
           />
         </div>
         <FormErrors id={id} errors={errors} />

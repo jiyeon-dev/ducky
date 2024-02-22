@@ -1,0 +1,16 @@
+/** Quill Editor Style **/
+.quill .ql-container,
+.quill .ql-editor {
+  height: auto;
+  min-height: 160px;
+  /* max-height: 50vh; */
+}
+
+.quill .ql-container {
+  font-size: 16px;
+}
+
+/* dark 모드일 때 버튼색상을 바꿀 수가 없어서 light 테마의 배경색으로 변경함 */
+.dark .quill {
+  background-color: #f1f2f4;
+}

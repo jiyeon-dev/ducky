@@ -1,7 +1,6 @@
 "use client";
 
 import { toast } from "sonner";
-import { useEventListener } from "usehooks-ts";
 import { useState, useRef } from "react";
 import { useAction } from "@/hooks/useAction";
 import { updateList } from "@/actions/kanban/updateList";
@@ -44,11 +43,11 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
 
   const handleSubmit = () => {
     const titleEl = inputRef.current as HTMLInputElement;
-    const newTitle = titleEl.value.trim();
+    const newTitle = titleEl?.value.trim();
 
     // 값이 없거나, 변경 데이터와 같은 경우
     if (!newTitle || newTitle === data.title) {
-      titleEl.value = title;
+      if (titleEl) titleEl.value = title;
       disableEditing();
       return;
     }
@@ -60,13 +59,12 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
     });
   };
 
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Escape") {
+  const onKeyDown = (event: React.KeyboardEvent) => {
+    console.log("list header");
+    if (event.key === "Escape") {
       handleSubmit();
     }
   };
-
-  useEventListener("keydown", onKeyDown);
 
   return (
     <div className='pt-2 px-2 text-sm font-semibold flex justify-between items-center gap-x-2'>
@@ -78,6 +76,7 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
             id='title'
             placeholder='Enter list title..'
             defaultValue={title}
+            onKeyDown={onKeyDown}
             className='text-sm px-[7px] py-1 h-7 font-medium border-transparent hover:border-input focus:border-input transition truncate bg-transparent'
           />
         </div>

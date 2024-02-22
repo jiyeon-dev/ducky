@@ -33,3 +33,26 @@ export type Card = {
 
 export type ListWithCards = List & { cards: Card[] };
 export type CardWithList = Card & { list: List };
+
+export enum ACTION {
+  CREATE,
+  UPDATE,
+  DELETE,
+}
+
+export enum ENTITY_TYPE {
+  BOARD,
+  LIST,
+  CARD,
+}
+
+export type ActivityLog = {
+  id: string;
+  action: ACTION;
+  entityId: string;
+  entityType: ENTITY_TYPE;
+  entityTitle: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+};

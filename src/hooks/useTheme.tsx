@@ -18,7 +18,7 @@ interface ThemeContextProps {
 interface ThemeProviderProps {
   enableSystem?: boolean | undefined; // 시스템 설정 값 따를지 설정
   storageKey?: string | undefined; // 로컬 스토리지 키
-  defaultTheme?: string | undefined; // 기본 테마
+  defaultTheme?: ThemeType | undefined; // 기본 테마
   children?: React.ReactNode;
 }
 
@@ -82,7 +82,7 @@ const Theme = ({
         return;
       }
 
-      const theme = e.newValue || defaultTheme;
+      const theme = (e.newValue as ThemeType) || defaultTheme;
       setTheme(theme);
     };
 

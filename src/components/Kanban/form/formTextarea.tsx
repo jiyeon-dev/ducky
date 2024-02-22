@@ -1,24 +1,16 @@
 "use client";
 
-import { ChangeEventHandler, KeyboardEventHandler, forwardRef } from "react";
+import { forwardRef } from "react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { FormErrors } from "./formErrors";
 
-interface FormTextareaProps {
+interface FormTextareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   id: string;
   label?: string;
-  placeholder?: string;
-  required?: boolean;
-  disabled?: boolean;
   errors?: Record<string, string[] | undefined>;
-  className?: string;
-  onBlur?: () => void;
-  onClick?: () => void;
-  onKeyDown?: KeyboardEventHandler<HTMLTextAreaElement> | undefined;
-  onInput?: ChangeEventHandler<HTMLTextAreaElement> | undefined;
-  defaultValue?: string;
 }
 
 export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
@@ -36,6 +28,7 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
       onKeyDown,
       onInput,
       defaultValue,
+      ...props
     },
     ref
   ) => {
@@ -68,6 +61,7 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
             aria-describedby={`${id}-error`}
             defaultValue={defaultValue}
             rows={1}
+            {...props}
           ></Textarea>
           <FormErrors id={id} errors={errors} />
         </div>

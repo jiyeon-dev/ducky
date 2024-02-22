@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 import RootLayout from "@/layout/Root";
 import HeroPage from "./page/Hero";
@@ -30,11 +31,15 @@ const router = createBrowserRouter([
   },
 ]);
 
+export const queryClient = new QueryClient();
+
 function App() {
   return (
-    <ThemeProvider defaultTheme='light' enableSystem storageKey='ducky-theme'>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme='light' enableSystem storageKey='ducky-theme'>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

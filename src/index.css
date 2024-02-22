@@ -82,6 +82,9 @@ body,
     --kanban-bg: #ffffff;
     --kanban-text: #172b4d;
     --kanban-border-focus: #388bff;
+    --kanban-modal-bg: #f1f2f4;
+    --kanban-modal-btn: #091e420f;
+    --kanban-modal-btn-hover: #091e4224;
   }
 
   :root.dark {
@@ -89,6 +92,9 @@ body,
     --kanban-bg: #22272b;
     --kanban-text: #b6c2cf;
     --kanban-border-focus: #85b8ff;
+    --kanban-modal-bg: #323941;
+    --kanban-modal-btn: #3a444d;
+    --kanban-modal-btn-hover: #a6c5e229;
   }
 }
 

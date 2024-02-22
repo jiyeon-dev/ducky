@@ -3,7 +3,6 @@ import React, {
   KeyboardEventHandler,
   ChangeEvent,
   useEffect,
-  forwardRef,
 } from "react";
 import { useEventListener, useOnClickOutside } from "usehooks-ts";
 import { toast } from "sonner";

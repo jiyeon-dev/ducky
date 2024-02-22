@@ -64,7 +64,12 @@ export default function ListItem({ data, index }: ListItemProps) {
                     )}
                   >
                     {data.cards?.map((card, index) => (
-                      <CardItem key={card.id} index={index} data={card} />
+                      <CardItem
+                        key={card.id}
+                        listId={data.id}
+                        index={index}
+                        data={card}
+                      />
                     ))}
                     {isEditing && (
                       <CardForm
