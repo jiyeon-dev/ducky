@@ -1,13 +1,16 @@
+@import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css);
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html,
 body,
+#root,
 :root {
   height: 100%;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
+  /* font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace; */
+  font-family: "Spoqa Han Sans Neo", "sans-serif";
 }
 
 @layer base {
@@ -72,6 +75,21 @@ body,
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
+
+  /* kanban style */
+  :root {
+    --kanban-list-bg: #f1f2f4;
+    --kanban-bg: #ffffff;
+    --kanban-text: #172b4d;
+    --kanban-border-focus: #388bff;
+  }
+
+  :root.dark {
+    --kanban-list-bg: #101204;
+    --kanban-bg: #22272b;
+    --kanban-text: #b6c2cf;
+    --kanban-border-focus: #85b8ff;
+  }
 }
 
 @layer base {
@@ -81,4 +99,21 @@ body,
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* fonts */
+@font-face {
+  font-family: "GmarketSansMedium";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TTHakgyoansimMulgyeolB";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_keris@1.0/TTHakgyoansimMulgyeolB.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
 }
