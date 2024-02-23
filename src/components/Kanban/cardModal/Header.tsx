@@ -75,6 +75,11 @@ export const Header = ({ data, user }: HeaderProps) => {
   const onKeydown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") {
       textareaRef.current?.blur();
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      textareaRef.current?.form?.dispatchEvent(
+        new Event("submit", { cancelable: true, bubbles: true })
+      );
     }
   };
 

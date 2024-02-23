@@ -33,6 +33,15 @@ export type Card = {
   updatedAt: Date;
 };
 
+export type Comment = {
+  id: string;
+  cardId: string;
+  message: string;
+  user: User;
+  createdAt: { seconds: number; nanoseconds: number };
+  // updatedAt: Date;
+};
+
 export type ListWithCards = List & { cards: Card[] };
 export type CardWithList = Card & { list: List };
 

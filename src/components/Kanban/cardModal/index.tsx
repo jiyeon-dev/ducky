@@ -44,6 +44,11 @@ export const CardModal = () => {
         queryFn: ({ queryKey }: any) =>
           fetchActivityLog({ ...(queryKey[1] as QueryKey) }),
       },
+      {
+        queryKey: ["comment", { id }],
+        queryFn: ({ queryKey }: any) =>
+          fetchCommentLog({ ...(queryKey[1] as QueryKey) }),
+      },
     ],
   });
 
@@ -79,10 +84,13 @@ export const CardModal = () => {
               ) : (
                 <Description data={result[0].data || []} user={user} />
               )}
-              {result[1].isLoading ? (
+              {result[1].isLoading || result[2].isLoading ? (
                 <Activity.Skeleton />
               ) : (
-                <Activity items={(result[1].data as []) || []} />
+                <Activity
+                  items={(result[1].data as []) || []}
+                  comments={(result[2].data as []) || []}
+                />
               )}
             </div>
           </div>
@@ -154,6 +162,26 @@ const fetchActivityLog = async ({ id, listId }: QueryKey) => {
       };
     });
     return newData;
+  } catch (error) {
+    throw new Error("Error fetching Firestore data: " + error);
+  }
+};
+
+const fetchCommentLog = async ({ id }: Omit<QueryKey, "listId">) => {
+  try {
+    if (!id) return {};
+    const q = query(
+      collection(db, "comment"),
+      where("cardId", "==", id),
+      orderBy("createdAt", "desc")
+    );
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map((item) => {
+      return {
+        id: item.id,
+        ...item.data(),
+      };
+    });
   } catch (error) {
     throw new Error("Error fetching Firestore data: " + error);
   }

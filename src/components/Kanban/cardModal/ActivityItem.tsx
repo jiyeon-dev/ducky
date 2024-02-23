@@ -1,10 +1,10 @@
 import { format } from "date-fns";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { ActivityLog } from "@/types";
+import { ActivityLog, Comment } from "@/types";
 
 interface ActivityItemProps {
-  data: ActivityLog;
+  data: ActivityLog | Comment;
 }
 
 export const ActivityItem = ({ data }: ActivityItemProps) => {
@@ -34,7 +34,7 @@ export const ActivityItem = ({ data }: ActivityItemProps) => {
           </span>
         </p>
         <p className='text-sm text-[var(--kanban-text)] bg-[var(--kanban-bg)] rounded-md px-3 py-2'>
-          {data.memo}
+          {"memo" in data ? data.memo : "message" in data ? data.message : ""}
         </p>
       </div>
     </li>

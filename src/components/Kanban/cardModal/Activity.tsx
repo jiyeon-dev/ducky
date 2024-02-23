@@ -1,14 +1,17 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { ActivityIcon } from "lucide-react";
 import { ActivityItem } from "./ActivityItem";
-import { ActivityLog } from "@/types";
+import { ActivityLog, Comment } from "@/types";
 import ActivityCommentInput from "./ActiviyCommentInput";
 
 interface ActivityProps {
   items: ActivityLog[];
+  comments: Comment[];
 }
 
-export const Activity = ({ items }: ActivityProps) => {
+export const Activity = ({ items, comments }: ActivityProps) => {
+  const logs = [...items, ...comments];
+  logs.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
   return (
     <div className='flex items-start gap-x-3 w-full'>
       <ActivityIcon className='h-5 w-5 mt-0.5 text-[var(--kanban-text)]' />
@@ -18,8 +21,8 @@ export const Activity = ({ items }: ActivityProps) => {
           {/* 댓글 입력 */}
           <ActivityCommentInput />
 
-          {items.map((item) => (
-            <ActivityItem key={item.id} data={item} />
+          {logs.map((item, index) => (
+            <ActivityItem key={`${item.id}-${index}`} data={item} />
           ))}
         </ol>
       </div>
