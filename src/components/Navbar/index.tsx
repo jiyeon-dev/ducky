@@ -7,7 +7,7 @@ import { useScrollTop } from "@/hooks/useScrollTop";
 import { ThemeToggle } from "./ThemeToggle";
 import MobileMenu from "./MobileMenu";
 import { NavMenu } from "./NavMenu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import NavAvatar from "./NavAvatar";
 
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
@@ -53,18 +53,8 @@ export default function Navbar() {
       <NavMenu className='hidden md:flex gap-x-5 mx-auto w-full justify-center text-xl' />
 
       <div className='justify-end flex items-center gap-x-2'>
-        {/* 사용자 정보 - 자리 확보를 위해 user 정보 없어도 표시하도록 함. */}
-        <Avatar>
-          <AvatarImage
-            src={user?.photoURL || ""}
-            alt={user?.displayName || ""}
-          />
-          {user && (
-            <AvatarFallback>
-              {user?.displayName?.slice(0, 2) || "AA"}
-            </AvatarFallback>
-          )}
-        </Avatar>
+        {/* 사용자 정보 */}
+        <NavAvatar user={user} />
 
         {/* 테마 변경 버튼 */}
         <ThemeToggle />
