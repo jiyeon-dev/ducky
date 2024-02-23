@@ -15,7 +15,7 @@ export const NavMenu = ({ className }: { className: string }) => {
         <NavMenuTitle>Home</NavMenuTitle>
       </NavLink>
       <NavLink
-        to='/'
+        to='/writing_ideas'
         className={({ isActive }) => (isActive ? "underline" : undefined)}
       >
         <NavMenuTitle>Writing Ideas</NavMenuTitle>
