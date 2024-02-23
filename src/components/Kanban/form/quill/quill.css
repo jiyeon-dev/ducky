@@ -14,3 +14,17 @@
 .dark .quill {
   background-color: #f1f2f4;
 }
+
+.quill p {
+  background-color: inherit;
+}
+
+.quill ol,
+.quill ul,
+.quill menu {
+  list-style: auto !important;
+}
+
+.quill a {
+  text-decoration: inherit;
+}

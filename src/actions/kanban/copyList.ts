@@ -13,8 +13,7 @@ import {
 import { z } from "zod";
 import { auth, db } from "@/lib/firebase";
 import { ActionState, fieldTypeChecker } from "@/lib/fieldTypeChecker";
-import { ACTION, ENTITY_TYPE, List } from "@/types";
-import { createActivityLog } from "../createActivityLog";
+import { List } from "@/types";
 
 // zod
 const CopyList = z.object({
