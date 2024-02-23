@@ -7,9 +7,11 @@ import { useAction } from "@/hooks/useAction";
 import { updateCard } from "@/actions/kanban/updateCard";
 import { toast } from "sonner";
 import { FormTextarea } from "../form/formTextarea";
+import { User } from "firebase/auth";
 
 interface HeaderProps {
   data: CardWithList;
+  user?: User | null;
 }
 
 const resizeTextarea = (target: HTMLTextAreaElement) => {
@@ -17,7 +19,7 @@ const resizeTextarea = (target: HTMLTextAreaElement) => {
   target.style.height = `${target.scrollHeight}px`;
 };
 
-export const Header = ({ data }: HeaderProps) => {
+export const Header = ({ data, user }: HeaderProps) => {
   const queryClient = useQueryClient();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [title, setTitle] = useState(data.title);
@@ -40,6 +42,7 @@ export const Header = ({ data }: HeaderProps) => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return;
     history.pushState({}, "", location.pathname);
 
     const formData = new FormData(e.target as HTMLFormElement);
@@ -74,6 +77,8 @@ export const Header = ({ data }: HeaderProps) => {
     }
   };
 
+  if (!data || Object.keys(data).length === 0) return <></>;
+
   return (
     <div className='flex items-start gap-x-3 mb-1 w-full sticky'>
       <Layout className='h-5 w-5 mt-3 text-[var(--kanban-text)]' />
@@ -86,7 +91,8 @@ export const Header = ({ data }: HeaderProps) => {
             onInput={onTextareaInput}
             onBlur={onBlur}
             onKeyDown={onKeydown}
-            className='min-h-[10px] whitespace-pre-wrap font-semibold text-xl px-1 text-[var(--kanban-text)] focus:bg-[var(--kanban-bg)] bg-transparent border-transparent relative -left-1.5 w-[95%] focus-visible:border-input mb-0.5 truncate'
+            disabled={!user}
+            className='min-h-[10px] whitespace-pre-wrap font-semibold text-xl px-1 text-[var(--kanban-text)] disabled:opacity-1 focus:bg-[var(--kanban-bg)] bg-transparent border-transparent relative -left-1.5 w-[95%] focus-visible:border-input mb-0.5 truncate'
           />
         </form>
         <p className='text-sm text-muted-foreground'>

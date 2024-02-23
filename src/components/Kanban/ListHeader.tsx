@@ -7,6 +7,7 @@ import { updateList } from "@/actions/kanban/updateList";
 import { List } from "@/types";
 import { FormInput } from "@/components/Kanban/form/formInput";
 import { ListHeaderOptions } from "./ListHeaderOptions";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ListHeaderProps {
   data: List;
@@ -14,12 +15,14 @@ interface ListHeaderProps {
 }
 
 export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
+  const user = useAuth();
   const [title, setTitle] = useState(data.title);
   const [isEditing, setIsEditing] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const enableEditing = () => {
+    if (!user) return;
     setIsEditing(true);
     setTimeout(() => {
       inputRef.current?.focus();
@@ -42,6 +45,7 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
   });
 
   const handleSubmit = () => {
+    if (!user) return;
     const titleEl = inputRef.current as HTMLInputElement;
     const newTitle = titleEl?.value.trim();
 
@@ -88,7 +92,7 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
           {title}
         </div>
       )}
-      <ListHeaderOptions onAddCard={onAddCard} data={data} />
+      {user && <ListHeaderOptions onAddCard={onAddCard} data={data} />}
     </div>
   );
 };

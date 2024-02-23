@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { cn } from "@/lib/utils";
 import { ListWithCards } from "@/types";
+import { useAuth } from "@/hooks/useAuth";
 import { ListHeader } from "./ListHeader";
 import { CardForm } from "./CardForm";
 import { CardItem } from "./CardItem";
@@ -14,6 +15,7 @@ interface ListItemProps {
 }
 
 export default function ListItem({ data, index }: ListItemProps) {
+  const user = useAuth();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -86,7 +88,9 @@ export default function ListItem({ data, index }: ListItemProps) {
                 </ScrollArea>
               )}
             </Droppable>
-            {!isEditing && <AddCardButton enableEditing={enableEditing} />}
+            {!isEditing && user && (
+              <AddCardButton enableEditing={enableEditing} />
+            )}
           </div>
         </li>
       )}

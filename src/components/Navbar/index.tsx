@@ -1,20 +1,29 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { auth } from "@/lib/firebase";
+import { User } from "firebase/auth";
 import { cn } from "@/lib/utils";
 import { useScrollTop } from "@/hooks/useScrollTop";
 import { ThemeToggle } from "./ThemeToggle";
 import MobileMenu from "./MobileMenu";
 import { NavMenu } from "./NavMenu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuth } from "@/hooks/useAuth";
 
 export default function Navbar() {
-  const user = useAuth();
+  const [user, setUser] = useState<User | null>(null);
   const scrolled = useScrollTop();
+
+  useEffect(() => {
+    const unsub = auth.onAuthStateChanged((data: User | null) => {
+      setUser(data);
+    });
+    return () => unsub();
+  }, [user]);
 
   return (
     <nav
       className={cn(
-        "z-50 fixed top-0 flex items-center w-screen py-5 px-6 justify-between",
+        "z-50 fixed top-0 flex items-center w-screen py-5 px-6 justify-between bg-background",
         scrolled && "border-b shadow-sm"
       )}
     >

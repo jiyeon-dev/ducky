@@ -47,7 +47,7 @@ export default function RegisterPage() {
             "text-5xl font-[TTHakgyoansimMulgyeolB] z-20 text-yellow-400"
           )}
         >
-          DUCKY
+          <Link to='/'>DUCKY</Link>
         </CardTitle>
         <CardDescription className='capitalize'>Register</CardDescription>
       </CardHeader>

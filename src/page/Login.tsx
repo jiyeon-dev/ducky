@@ -44,7 +44,7 @@ export default function LoginPage() {
             "text-5xl font-[TTHakgyoansimMulgyeolB] z-20 text-yellow-400"
           )}
         >
-          DUCKY
+          <Link to='/'>DUCKY</Link>
         </CardTitle>
         <CardDescription className='capitalize'>login</CardDescription>
       </CardHeader>

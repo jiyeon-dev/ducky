@@ -1,4 +1,4 @@
-import Kanban from "@/components/Kanban";
+import { useCallback, useEffect, useState } from "react";
 import {
   collection,
   onSnapshot,
@@ -7,25 +7,37 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { useEffect, useState } from "react";
 import { List } from "@/types";
+import Kanban from "@/components/Kanban";
 import { CardModal } from "@/components/Kanban/cardModal";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 export default function StoragePage() {
   const [lists, setLists] = useState<List[]>([]);
-  useEffect(() => {
+  const [isLoading, setLoading] = useState<boolean>(false);
+
+  // 변경된 리스트/카드 정보 갖고오기
+  const fetchData = useCallback(() => {
+    setLoading(true);
     const q = query(
       collection(db, "kanban"),
       where("boardId", "==", "ducky"),
       orderBy("order", "asc")
     );
-
-    onSnapshot(q, (doc) => {
+    const unsubscribe = onSnapshot(q, (doc) => {
       const data = doc.docs.map(
         (item) => ({ ...item.data(), id: item.id } as List)
       );
       setLists(data);
     });
+
+    setLoading(false);
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = fetchData();
+    return () => unsubscribe();
   }, []);
 
   return (
@@ -45,7 +57,8 @@ export default function StoragePage() {
 
         {/* body */}
         <div className='p-4 h-full overflow-x-auto'>
-          <Kanban data={lists} boardId='ducky' />
+          {isLoading && <LoadingSpinner />}
+          {!isLoading && <Kanban data={lists} boardId='ducky' />}
         </div>
       </div>
 

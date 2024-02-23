@@ -8,6 +8,7 @@ import { useAction } from "@/hooks/useAction";
 import { toast } from "sonner";
 import { updateListOrder } from "@/actions/kanban/updateListOrder";
 import { updateCardOrder } from "@/actions/kanban/updateCardOrder";
+import { useAuth } from "@/hooks/useAuth";
 
 interface KanbanProps {
   data: List[];
@@ -22,6 +23,7 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number) {
 }
 
 export default function Kanban({ data, boardId }: KanbanProps) {
+  const user = useAuth();
   const [orderedData, setOrderedData] = useState(data); // db 저장 전 저장해서 보여주기 위해 생성
 
   useEffect(() => {
@@ -105,7 +107,6 @@ export default function Kanban({ data, boardId }: KanbanProps) {
           listId2: destination.droppableId,
           boardId,
         });
-        // executeUpdateCardOrder({ items: reorderedCards, boardId });
       } else {
         // source 리스트에서 카드 제거후 movedCard에 저장
         const [movedCard] = sourceList.cards.splice(source.index, 1);
@@ -150,7 +151,7 @@ export default function Kanban({ data, boardId }: KanbanProps) {
             ))}
             {provided.placeholder}
             {/* 새 리스트 추가 폼 */}
-            <AddListForm />
+            {user && <AddListForm />}
             <div className='flex-shrink-0 w-1' />
           </ol>
         )}

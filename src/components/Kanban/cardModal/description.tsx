@@ -13,19 +13,26 @@ import ReactQuill from "react-quill";
 import { useAction } from "@/hooks/useAction";
 import { updateCard } from "@/actions/kanban/updateCard";
 import { toast } from "sonner";
+import { User } from "firebase/auth";
 
 interface DescriptionProps {
   data: CardWithList;
+  user?: User | null;
 }
 
-export const Description = ({ data }: DescriptionProps) => {
+export const Description = ({ data, user }: DescriptionProps) => {
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
   const quillRef = useRef<ReactQuill>(null);
 
+  const defaultMessage = user
+    ? "<p>Add a more detailed description...</p>"
+    : "<p></p>";
+
   const enableEditing = () => {
+    if (!user) return;
     setIsEditing(true);
     setTimeout(() => {
       quillRef.current?.focus();
@@ -57,6 +64,7 @@ export const Description = ({ data }: DescriptionProps) => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return;
 
     // 입력 값
     const editor = quillRef.current?.makeUnprivilegedEditor(
@@ -114,8 +122,7 @@ export const Description = ({ data }: DescriptionProps) => {
               data.description ? "" : "bg-[var(--kanban-modal-btn)] pl-3.5"
             )}
             dangerouslySetInnerHTML={{
-              __html:
-                data.description || "<p>Add a more detailed description...</p>",
+              __html: data.description || defaultMessage,
             }}
           ></div>
         )}

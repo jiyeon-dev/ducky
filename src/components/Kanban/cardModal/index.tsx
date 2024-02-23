@@ -3,6 +3,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useCardModal } from "@/hooks/useCardModal";
 import { Card, CardWithList } from "@/types";
 import { db } from "@/lib/firebase";
+import { useAuth } from "@/hooks/useAuth";
 import { Dialog } from "@radix-ui/react-dialog";
 import { DialogContent } from "@/components/ui/dialog";
 import { Header } from "./Header";
@@ -16,6 +17,7 @@ interface QueryKey {
 }
 
 export const CardModal = () => {
+  const user = useAuth();
   const id = useCardModal((state) => state.id);
   const listId = useCardModal((state) => state.listId);
   const isOpen = useCardModal((state) => state.isOpen);
@@ -24,6 +26,7 @@ export const CardModal = () => {
   const { data: cardData, isPending } = useQuery<CardWithList>({
     queryKey: ["card", { id, listId }],
     queryFn: ({ queryKey }) => fetchCard({ ...(queryKey[1] as QueryKey) }),
+    retry: 0,
   });
 
   const onEscapeKeyDown = (e: KeyboardEvent) => {
@@ -43,18 +46,22 @@ export const CardModal = () => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className={
-          "bg-[var(--kanban-modal-bg)] lg:max-w-screen-lg h-screen md:h-[90vh] flex flex-col"
+          "bg-[var(--kanban-modal-bg)] lg:max-w-screen-md h-screen md:h-[90vh] flex flex-col"
         }
         onEscapeKeyDown={onEscapeKeyDown}
       >
-        {!cardData ? <Header.Skeleton /> : <Header data={cardData} />}
+        {!cardData ? (
+          <Header.Skeleton />
+        ) : (
+          <Header data={cardData} user={user} />
+        )}
         <div className='grid grid-cols-1 md:grid-cols-4 md:gap-4 overflow-y-auto'>
-          <div className='col-span-3'>
+          <div className={user ? "col-span-3" : "col-span-4"}>
             <div className='w-full space-y-6 overflow-y-auto'>
               {!cardData ? (
                 <Description.Skeleton />
               ) : (
-                <Description data={cardData} />
+                <Description data={cardData} user={user} />
               )}
               {/* {!activityLogsData ? (
                 <Activity.Skeleton />
@@ -64,7 +71,13 @@ export const CardModal = () => {
               {!cardData ? <Activity.Skeleton /> : <Activity items={[]} />}
             </div>
           </div>
-          {!cardData ? <Actions.Skeleton /> : <Actions data={cardData} />}
+          {user ? (
+            !cardData ? (
+              <Actions.Skeleton />
+            ) : (
+              <Actions data={cardData} />
+            )
+          ) : null}
         </div>
       </DialogContent>
     </Dialog>
@@ -73,6 +86,8 @@ export const CardModal = () => {
 
 const fetchCard = async ({ id, listId }: QueryKey) => {
   try {
+    if (!id || !listId) return {};
+
     // array 안의 object key로는 검색이 안되기 떄문에, list 먼저 찾고 그 안에서 검색하도록 함
     const docRef = doc(db, "kanban", listId);
     const docSnapshot = await getDoc(docRef);
