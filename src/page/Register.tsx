@@ -14,6 +14,7 @@ import {
 import { FormInput } from "@/components/Kanban/form/formInput";
 import { FormSubmit } from "@/components/Kanban/form/formSubmit";
 import AvatarSelect from "@/components/AvatarSelect";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ export default function RegisterPage() {
 
   return (
     <>
+      {isLoading && <LoadingSpinner />}
       <CardHeader className='text-center select-none'>
         <CardTitle
           className={cn(

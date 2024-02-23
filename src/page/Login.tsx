@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { FormInput } from "@/components/Kanban/form/formInput";
 import { FormSubmit } from "@/components/Kanban/form/formSubmit";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ export default function LoginPage() {
 
   return (
     <>
+      {isLoading && <LoadingSpinner />}
       <CardHeader className='text-center select-none'>
         <CardTitle
           className={cn(
