@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
 import {
   collection,
-  onSnapshot,
+  doc,
+  getDocs,
   orderBy,
   query,
   where,
@@ -11,34 +11,46 @@ import { List } from "@/types";
 import Kanban from "@/components/Kanban";
 import { CardModal } from "@/components/Kanban/cardModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { useQuery } from "@tanstack/react-query";
+import { useCardModal } from "@/hooks/useCardModal";
+
+interface QueryKey {
+  boardId: string;
+}
 
 export default function StoragePage() {
-  const [lists, setLists] = useState<List[]>([]);
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const isOpen = useCardModal((state) => state.isOpen);
+  const { data: lists, isLoading } = useQuery({
+    queryKey: ["storage", { boardId: "ducky" }],
+    queryFn: ({ queryKey }) => fetchData({ ...(queryKey[1] as QueryKey) }),
+  });
 
-  // 변경된 리스트/카드 정보 갖고오기
-  const fetchData = useCallback(() => {
-    setLoading(true);
-    const q = query(
-      collection(db, "kanban"),
-      where("boardId", "==", "ducky"),
-      orderBy("order", "asc")
-    );
-    const unsubscribe = onSnapshot(q, (doc) => {
-      const data = doc.docs.map(
-        (item) => ({ ...item.data(), id: item.id } as List)
-      );
-      setLists(data);
-    });
+  // const [lists, setLists] = useState<List[]>([]);
+  // const [isLoading, setLoading] = useState<boolean>(false);
 
-    setLoading(false);
-    return unsubscribe;
-  }, []);
+  // // 변경된 리스트/카드 정보 갖고오기
+  // const fetchData = useCallback(() => {
+  //   setLoading(true);
+  //   const q = query(
+  //     collection(db, "kanban"),
+  //     where("boardId", "==", "ducky"),
+  //     orderBy("order", "asc")
+  //   );
+  //   const unsubscribe = onSnapshot(q, (doc) => {
+  //     const data = doc.docs.map(
+  //       (item) => ({ ...item.data(), id: item.id } as List)
+  //     );
+  //     setLists(data);
+  //   });
 
-  useEffect(() => {
-    const unsubscribe = fetchData();
-    return () => unsubscribe();
-  }, []);
+  //   setLoading(false);
+  //   return unsubscribe;
+  // }, []);
+
+  // useEffect(() => {
+  //   const unsubscribe = fetchData();
+  //   return () => unsubscribe();
+  // }, []);
 
   return (
     <>
@@ -58,11 +70,30 @@ export default function StoragePage() {
         {/* body */}
         <div className='p-4 h-full overflow-x-auto'>
           {isLoading && <LoadingSpinner />}
-          {!isLoading && <Kanban data={lists} boardId='ducky' />}
+          {!isLoading && <Kanban data={lists || []} boardId='ducky' />}
         </div>
       </div>
 
-      <CardModal />
+      {isOpen && <CardModal />}
     </>
   );
 }
+
+const fetchData = async ({ boardId }: QueryKey) => {
+  const q = query(
+    collection(db, "kanban"),
+    where("boardId", "==", boardId),
+    orderBy("order", "asc")
+  );
+
+  const querySnapshot = await getDocs(q);
+  const data = querySnapshot.docs.map((item) => {
+    const sortedCard = item
+      .data()
+      .cards.sort(
+        (a: { order: number }, b: { order: number }) => a.order - b.order
+      );
+    return { ...item.data(), cards: sortedCard, id: item.id } as List;
+  });
+  return data;
+};

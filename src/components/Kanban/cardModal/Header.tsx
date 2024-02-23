@@ -31,6 +31,7 @@ export const Header = ({ data, user }: HeaderProps) => {
 
   const { execute } = useAction(updateCard, {
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["storage"] });
       queryClient.invalidateQueries({ queryKey: ["card"] });
       toast.success(`Renamed to "${data.title}"`);
       setTitle(data.title);

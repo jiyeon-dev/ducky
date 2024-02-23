@@ -1,3 +1,5 @@
+import { User } from "firebase/auth";
+
 export type Board = {
   id: string;
   title: string;
@@ -58,4 +60,5 @@ export type ActivityLog = {
   createdAt: Date;
   updatedAt: Date;
   memo?: string;
+  user?: User
 };

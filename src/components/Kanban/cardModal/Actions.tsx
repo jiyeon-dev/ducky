@@ -6,6 +6,7 @@ import { useAction } from "@/hooks/useAction";
 import { deleteCard } from "@/actions/kanban/deleteCard";
 import { toast } from "sonner";
 import { useCardModal } from "@/hooks/useCardModal";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ActionsProps {
   data: CardWithList;
@@ -13,12 +14,16 @@ interface ActionsProps {
 
 export const Actions = ({ data }: ActionsProps) => {
   const cardModal = useCardModal();
+  const queryClient = useQueryClient();
 
   const { execute: executeDeleteCard, isLoading: isLoadingDelete } = useAction(
     deleteCard,
     {
       onSuccess: (data) => {
         toast.success(`Card "${data.title}" deleted`);
+        queryClient.invalidateQueries({
+          queryKey: ["storage"],
+        });
         cardModal.onClose();
       },
       onError: (error) => {
