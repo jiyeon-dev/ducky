@@ -1,11 +1,4 @@
-import {
-  collection,
-  doc,
-  getDocs,
-  orderBy,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { List } from "@/types";
 import Kanban from "@/components/Kanban";

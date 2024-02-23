@@ -57,8 +57,8 @@ export type ActivityLog = {
   entityType: ENTITY_TYPE;
   entityTitle: string;
   userId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: { seconds: number; nanoseconds: number };
+  updatedAt: { seconds: number; nanoseconds: number };
   memo?: string;
-  user?: User
+  user?: User;
 };
