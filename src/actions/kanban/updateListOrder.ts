@@ -1,8 +1,9 @@
 import { doc, serverTimestamp, writeBatch } from "firebase/firestore";
 import { z } from "zod";
-import { db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { ActionState, fieldTypeChecker } from "@/lib/fieldTypeChecker";
-import { List } from "@/types";
+import { ACTION, ENTITY_TYPE, List } from "@/types";
+import { createActivityLog } from "../createActivityLog";
 
 // zod
 const UpdateListOrder = z.object({
@@ -14,6 +15,7 @@ const UpdateListOrder = z.object({
     })
   ),
   boardId: z.string(),
+  id: z.string(),
 });
 
 // types
@@ -22,8 +24,14 @@ type ReturnType = ActionState<InputType, Partial<List>[]>;
 
 // handler
 const handler = async (data: InputType): Promise<ReturnType> => {
-  const { items } = data;
+  const { items, id } = data;
   let lists;
+
+  const user = auth.currentUser;
+  if (!user)
+    return {
+      error: "Unauthenticated user.",
+    };
 
   try {
     const batch = writeBatch(db);
@@ -35,6 +43,16 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     });
     await batch.commit();
     lists = [...items];
+
+    // 로그 추가
+    await createActivityLog({
+      action: ACTION.MOVED,
+      entityId: id,
+      entityType: ENTITY_TYPE.LIST,
+      entityTitle: "",
+      userId: auth.currentUser?.uid || "",
+      memo: "moved this list",
+    });
   } catch (e) {
     return {
       error: "Failed to reorder.",

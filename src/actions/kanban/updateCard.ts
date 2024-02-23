@@ -1,6 +1,6 @@
 import { ActionState, fieldTypeChecker } from "@/lib/fieldTypeChecker";
-import { db } from "@/lib/firebase";
-import { Card } from "@/types";
+import { auth, db } from "@/lib/firebase";
+import { ACTION, Card, ENTITY_TYPE } from "@/types";
 import {
   arrayRemove,
   arrayUnion,
@@ -8,6 +8,7 @@ import {
   runTransaction,
 } from "firebase/firestore";
 import { z } from "zod";
+import { createActivityLog } from "../createActivityLog";
 
 // zod
 const UpdateCard = z.object({
@@ -46,6 +47,12 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   const { id, listId, ...values } = data;
   let card;
 
+  const user = auth.currentUser;
+  if (!user)
+    return {
+      error: "Unauthenticated user.",
+    };
+
   try {
     await runTransaction(db, async (transaction) => {
       // 리스트 조회
@@ -62,6 +69,16 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       transaction.update(listRef, { cards: arrayUnion(newCard) }); // 현재 카드 추가
 
       card = newCard;
+    });
+
+    // 로그 추가
+    await createActivityLog({
+      action: ACTION.UPDATE,
+      entityId: id,
+      entityType: ENTITY_TYPE.CARD,
+      entityTitle: values.title as string,
+      userId: auth.currentUser?.uid || "",
+      memo: `updated this card`,
     });
   } catch (error) {
     return {

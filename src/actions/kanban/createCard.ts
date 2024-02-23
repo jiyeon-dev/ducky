@@ -1,4 +1,4 @@
-import { Card, List } from "@/types";
+import { ACTION, Card, ENTITY_TYPE, List } from "@/types";
 import { ActionState, fieldTypeChecker } from "@/lib/fieldTypeChecker";
 import {
   Timestamp,
@@ -8,8 +8,9 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { z } from "zod";
-import { db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { v4 as uuid } from "uuid";
+import { createActivityLog } from "../createActivityLog";
 
 // zod
 const CreateCard = z.object({
@@ -34,6 +35,12 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   const { title, listId } = data;
   let card;
 
+  const user = auth.currentUser;
+  if (!user)
+    return {
+      error: "Unauthenticated user.",
+    };
+
   try {
     // 현재 리스트에 속한 카드 리스트 조회
     const docSnapshot = await getDoc(doc(db, "kanban", listId));
@@ -55,6 +62,16 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
       }),
+    });
+
+    // 로그 추가
+    await createActivityLog({
+      action: ACTION.CREATE,
+      entityId: cardId,
+      entityType: ENTITY_TYPE.CARD,
+      entityTitle: data.title,
+      userId: auth.currentUser?.uid || "",
+      memo: "created this card",
     });
 
     card = {

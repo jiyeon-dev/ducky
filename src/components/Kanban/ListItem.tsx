@@ -41,7 +41,7 @@ export default function ListItem({ data, index }: ListItemProps) {
   }, [scrollRef]);
 
   return (
-    <Draggable draggableId={data.id} index={index}>
+    <Draggable draggableId={data.id} index={index} isDragDisabled={!user}>
       {(provided) => (
         <li
           {...provided.draggableProps}

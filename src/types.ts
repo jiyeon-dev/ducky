@@ -35,15 +35,17 @@ export type ListWithCards = List & { cards: Card[] };
 export type CardWithList = Card & { list: List };
 
 export enum ACTION {
-  CREATE,
-  UPDATE,
-  DELETE,
+  CREATE = "CREATE",
+  ADDED = "ADDED",
+  UPDATE = "UPDATE",
+  DELETE = "DELETE",
+  MOVED = "MOVED",
 }
 
 export enum ENTITY_TYPE {
-  BOARD,
-  LIST,
-  CARD,
+  BOARD = "BOARD",
+  LIST = "LIST",
+  CARD = "CARD",
 }
 
 export type ActivityLog = {
@@ -55,4 +57,5 @@ export type ActivityLog = {
   userId: string;
   createdAt: Date;
   updatedAt: Date;
+  memo?: string;
 };

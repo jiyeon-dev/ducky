@@ -69,9 +69,9 @@ export const CardForm = ({
   const onTextareaKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      formRef.current?.dispatchEvent(
-        new Event("submit", { cancelable: true, bubbles: true })
-      );
+      // formRef.current?.dispatchEvent(
+      //   new Event("submit", { cancelable: true, bubbles: true })
+      // );
     }
   };
 

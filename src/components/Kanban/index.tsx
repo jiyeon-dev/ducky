@@ -68,7 +68,7 @@ export default function Kanban({ data, boardId }: KanbanProps) {
         })
       );
       setOrderedData(items);
-      executeUpdateListOrder({ items, boardId });
+      executeUpdateListOrder({ items, boardId, id: source.droppableId });
     }
 
     // 조건3. card 이동한 경우
@@ -89,6 +89,7 @@ export default function Kanban({ data, boardId }: KanbanProps) {
 
       // 같은 리스트에 카드를 옮긴 경우
       if (destination.droppableId === source.droppableId) {
+        const movedCard = sourceList.cards[source.index]; // 변경할 카드
         const reorderedCards = reorder(
           sourceList.cards,
           source.index,
@@ -106,6 +107,7 @@ export default function Kanban({ data, boardId }: KanbanProps) {
           items2: sourceList.cards,
           listId2: destination.droppableId,
           boardId,
+          id: movedCard.id,
         });
       } else {
         // source 리스트에서 카드 제거후 movedCard에 저장
@@ -132,6 +134,7 @@ export default function Kanban({ data, boardId }: KanbanProps) {
           items2: destList.cards,
           listId2: destination.droppableId,
           boardId,
+          id: movedCard.id,
         });
       }
     }

@@ -11,9 +11,10 @@ import {
   where,
 } from "firebase/firestore";
 import { z } from "zod";
-import { db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { ActionState, fieldTypeChecker } from "@/lib/fieldTypeChecker";
-import { List } from "@/types";
+import { ACTION, ENTITY_TYPE, List } from "@/types";
+import { createActivityLog } from "../createActivityLog";
 
 // zod
 const CopyList = z.object({
@@ -29,6 +30,12 @@ type ReturnType = ActionState<InputType, Partial<List>>;
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { id, boardId } = data;
   let list;
+
+  const user = auth.currentUser;
+  if (!user)
+    return {
+      error: "Unauthenticated user.",
+    };
 
   try {
     // 선택한 리스트의 정보 조회

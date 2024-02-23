@@ -1,4 +1,4 @@
-import { Card } from "@/types";
+import { ACTION, Card, ENTITY_TYPE } from "@/types";
 import { ActionState, fieldTypeChecker } from "@/lib/fieldTypeChecker";
 import {
   arrayUnion,
@@ -7,7 +7,8 @@ import {
   runTransaction,
 } from "firebase/firestore";
 import { z } from "zod";
-import { db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
+import { createActivityLog } from "../createActivityLog";
 
 // zod
 export const UpdateCardOrder = z.object({
@@ -30,6 +31,7 @@ export const UpdateCardOrder = z.object({
     })
   ),
   boardId: z.string(),
+  id: z.string(),
 });
 
 // types
@@ -38,8 +40,14 @@ type ReturnType = ActionState<InputType, Partial<Card>[]>;
 
 // handler
 const handler = async (data: InputType): Promise<ReturnType> => {
-  const { listId1, items1, listId2, items2 } = data;
+  const { listId1, items1, listId2, items2, id } = data;
   let cards;
+
+  const user = auth.currentUser;
+  if (!user)
+    return {
+      error: "Unauthenticated user.",
+    };
 
   try {
     await runTransaction(db, async (transaction) => {
@@ -54,7 +62,16 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       transaction.update(list2Ref, { cards: arrayUnion(...items2) });
     });
     cards = items2;
-    // });
+
+    // 로그 추가
+    await createActivityLog({
+      action: ACTION.MOVED,
+      entityId: id,
+      entityType: ENTITY_TYPE.CARD,
+      entityTitle: "",
+      userId: auth.currentUser?.uid || "",
+      memo: "moved this card",
+    });
   } catch (e) {
     return {
       error: "Failed to reorder.",

@@ -1,8 +1,9 @@
 import { arrayRemove, doc, runTransaction } from "firebase/firestore";
 import { z } from "zod";
-import { db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { ActionState, fieldTypeChecker } from "@/lib/fieldTypeChecker";
-import { Card } from "@/types";
+import { ACTION, Card, ENTITY_TYPE } from "@/types";
+import { createActivityLog } from "../createActivityLog";
 
 // zod
 export const DeleteCard = z.object({
@@ -19,7 +20,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   const { id, listId } = data;
   let result;
 
+  const user = auth.currentUser;
+  if (!user)
+    return {
+      error: "Unauthenticated user.",
+    };
+
   try {
+    let title = "";
     await runTransaction(db, async (transaction) => {
       // 리스트 조회
       const listRef = doc(db, "kanban", listId);
@@ -27,12 +35,22 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
       // 현재 카드 정보 조회
       const curCard = listDoc.get("cards").find((card: Card) => card.id === id);
-      console.log(curCard);
+      title = curCard.title;
 
       // 현재 카드 삭제
       transaction.update(listRef, { cards: arrayRemove(curCard) });
 
       result = curCard;
+    });
+
+    // 로그 추가
+    await createActivityLog({
+      action: ACTION.DELETE,
+      entityId: id,
+      entityType: ENTITY_TYPE.CARD,
+      entityTitle: title,
+      userId: auth.currentUser?.uid || "",
+      memo: "deleted this card",
     });
   } catch (e) {
     return {

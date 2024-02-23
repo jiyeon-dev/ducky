@@ -1,6 +1,7 @@
 import { Draggable } from "@hello-pangea/dnd";
 import { Card } from "@/types";
 import { useCardModal } from "@/hooks/useCardModal";
+import { useAuth } from "@/hooks/useAuth";
 
 interface CardItemProps {
   data: Card;
@@ -9,10 +10,11 @@ interface CardItemProps {
 }
 
 export const CardItem = ({ data, listId, index }: CardItemProps) => {
+  const user = useAuth();
   const { onOpen } = useCardModal();
 
   return (
-    <Draggable draggableId={data.id} index={index}>
+    <Draggable draggableId={data.id} index={index} isDragDisabled={!user}>
       {(provided) => (
         <div
           {...provided.draggableProps}
