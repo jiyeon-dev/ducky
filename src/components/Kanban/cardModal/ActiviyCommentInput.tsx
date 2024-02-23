@@ -1,9 +1,4 @@
-import React, {
-  ChangeEvent,
-  KeyboardEventHandler,
-  useRef,
-  useState,
-} from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { createComment } from "@/actions/kanban/createComment";
 import { useAction } from "@/hooks/useAction";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

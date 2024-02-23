@@ -1,9 +1,4 @@
-import React, {
-  useRef,
-  KeyboardEventHandler,
-  ChangeEvent,
-  useEffect,
-} from "react";
+import React, { useRef, ChangeEvent, useEffect } from "react";
 import { useEventListener, useOnClickOutside } from "usehooks-ts";
 import { toast } from "sonner";
 import { useAction } from "@/hooks/useAction";
