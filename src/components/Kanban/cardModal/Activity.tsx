@@ -11,7 +11,11 @@ interface ActivityProps {
 
 export const Activity = ({ items, comments }: ActivityProps) => {
   const logs = [...items, ...comments];
-  logs.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+  try {
+    logs.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+  } catch (e) {
+    //
+  }
   return (
     <div className='flex items-start gap-x-3 w-full'>
       <ActivityIcon className='h-5 w-5 mt-0.5 text-[var(--kanban-text)]' />

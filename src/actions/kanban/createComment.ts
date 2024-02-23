@@ -23,12 +23,12 @@ type ReturnType = ActionState<InputType, string>;
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { message, cardId } = data;
   let result;
-
   const user = auth.currentUser;
-  if (!user)
-    return {
-      error: "Unauthenticated user.",
-    };
+  const anonymous = {
+    uid: Date.now(),
+    photoURL: "",
+    displayName: `익명-${Date.now()}`,
+  }; // 익명 유저
 
   try {
     const docRef = await addDoc(collection(db, "comment"), {
@@ -36,9 +36,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       message,
       createdAt: serverTimestamp(),
       user: {
-        uid: user.uid,
-        photoURL: user.photoURL,
-        displayName: user.displayName,
+        uid: user ? user.uid : anonymous.uid,
+        photoURL: user ? user.photoURL : anonymous.photoURL,
+        displayName: user ? user.displayName : anonymous.displayName,
       },
     });
 
