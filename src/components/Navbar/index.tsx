@@ -4,14 +4,17 @@ import { useScrollTop } from "@/hooks/useScrollTop";
 import { ThemeToggle } from "./ThemeToggle";
 import MobileMenu from "./MobileMenu";
 import { NavMenu } from "./NavMenu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Navbar() {
+  const user = useAuth();
   const scrolled = useScrollTop();
 
   return (
     <nav
       className={cn(
-        "z-50 fixed bg-background top-0 flex items-center w-dvw	container py-5 px-6 justify-between",
+        "z-50 fixed top-0 flex items-center w-screen py-5 px-6 justify-between",
         scrolled && "border-b shadow-sm"
       )}
     >
@@ -21,18 +24,40 @@ export default function Navbar() {
       </div>
 
       {/* 로고 */}
-      <Link to='/' className='md:flex mx-auto items-center gap-x-2'>
-        <img src='/ducky.svg' height='40' width='40' alt='logo-ducky' />
-        <p className='font-semibold text-nowrap text-yellow-500 hidden md:block'>
+      <Link
+        to='/'
+        className='md:flex items-center justify-center gap-x-2 shrink-0 ml-[40px] md:ml-auto' // 아바타 크기만큼 ml
+      >
+        <img
+          src='/ducky.svg'
+          height='40'
+          width='40'
+          alt='logo-ducky'
+          className='block'
+        />
+        <div className='font-semibold text-nowrap text-yellow-500 hidden md:block'>
           Ducky
-        </p>
+        </div>
       </Link>
 
       {/* 메뉴 */}
       <NavMenu className='hidden md:flex gap-x-5 mx-auto w-full justify-center text-xl' />
 
-      {/* 테마 변경 버튼 */}
       <div className='justify-end flex items-center gap-x-2'>
+        {/* 사용자 정보 - 자리 확보를 위해 user 정보 없어도 표시하도록 함. */}
+        <Avatar>
+          <AvatarImage
+            src={user?.photoURL || ""}
+            alt={user?.displayName || ""}
+          />
+          {user && (
+            <AvatarFallback>
+              {user?.displayName?.slice(0, 2) || "AA"}
+            </AvatarFallback>
+          )}
+        </Avatar>
+
+        {/* 테마 변경 버튼 */}
         <ThemeToggle />
       </div>
     </nav>

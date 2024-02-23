@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Heading() {
   return (
@@ -18,10 +19,12 @@ export default function Heading() {
           and manage your projects like a boss!
         </h3>
 
-        <Button className='font-bold'>
-          Join
-          <ArrowRight className='h-4 w-4 ml-2' />
-        </Button>
+        <Link to='/login'>
+          <Button className='font-bold mt-8'>
+            Join
+            <ArrowRight className='h-4 w-4 ml-2' />
+          </Button>
+        </Link>
       </div>
 
       <div className='flex flex-col items-center justify-center max-w-5xl'>

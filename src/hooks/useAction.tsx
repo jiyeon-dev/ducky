@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { FieldErrors, ActionState } from "@/lib/fieldTypeChecker";
 
-type Action<TInput, TOutput> = (
+export type Action<TInput, TOutput> = (
   data: TInput
 ) => Promise<ActionState<TInput, TOutput>>;
 
