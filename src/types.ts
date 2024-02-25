@@ -1,5 +1,23 @@
 import { User } from "firebase/auth";
 
+type TimeStamp = { seconds: number; nanoseconds: number };
+
+export type Category = {
+  id: string;
+  name: string;
+  order?: number;
+  posts: Post[];
+};
+
+export type Post = {
+  id: string;
+  title: string;
+  createdAt: TimeStamp;
+  updatedAt: TimeStamp;
+  mainImageUrl: string;
+  content: string;
+};
+
 export type Board = {
   id: string;
   title: string;
@@ -38,7 +56,7 @@ export type Comment = {
   cardId: string;
   message: string;
   user: User;
-  createdAt: { seconds: number; nanoseconds: number };
+  createdAt: TimeStamp;
   // updatedAt: Date;
 };
 
@@ -66,8 +84,8 @@ export type ActivityLog = {
   entityType: ENTITY_TYPE;
   entityTitle: string;
   userId: string;
-  createdAt: { seconds: number; nanoseconds: number };
-  updatedAt: { seconds: number; nanoseconds: number };
+  createdAt: TimeStamp;
+  updatedAt: TimeStamp;
   memo?: string;
   user?: User;
 };

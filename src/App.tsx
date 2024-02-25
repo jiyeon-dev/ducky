@@ -28,6 +28,12 @@ const router = createBrowserRouter([
       {
         path: "writing_ideas", // 글감 페이지
         element: <WritingIdeasPage />,
+        children: [
+          {
+            path: ":id",
+            element: <WritingIdeasPage />,
+          },
+        ],
       },
     ],
   },
