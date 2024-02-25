@@ -74,10 +74,12 @@ export const CardModal = ({ isMobile = false }: { isMobile: boolean }) => {
       )}
 
       <div
+        id='scroll'
         className={cn(
-          "grid grid-cols-1 md:gap-4 overflow-y-auto",
-          isMobile ? "grid-cols-1 h-full" : "md:grid-cols-4"
+          "grid grid-cols-1 md:gap-4 overflow-y-auto h-full",
+          isMobile ? "grid-cols-1" : "md:grid-cols-4"
         )}
+        // style={{ height: "calc(100% - 16px)" }}
       >
         <div className={user ? "col-span-3" : "col-span-4"}>
           <div className='w-full space-y-6 overflow-y-auto'>
@@ -110,7 +112,7 @@ export const CardModal = ({ isMobile = false }: { isMobile: boolean }) => {
   if (isMobile) {
     return (
       <Drawer open={isOpen} onClose={onClose}>
-        <DrawerContent className='h-screen top-0 left-0 right-auto mt-0 w-full rounded-none bg-[var(--kanban-modal-bg)]'>
+        <DrawerContent className='top-0 left-0 h-screen w-full mt-0 rounded-none bg-[var(--kanban-modal-bg)]'>
           <DrawerClose
             className='absolute right-0 top-0 mr-4 mt-4'
             onClick={onClose}
@@ -118,7 +120,7 @@ export const CardModal = ({ isMobile = false }: { isMobile: boolean }) => {
             <X />
           </DrawerClose>
 
-          <div className='p-8 h-full'>{content}</div>
+          <div className='p-8 h-full flex flex-col'>{content}</div>
         </DrawerContent>
       </Drawer>
     );
