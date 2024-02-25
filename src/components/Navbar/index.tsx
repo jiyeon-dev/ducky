@@ -8,6 +8,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import MobileMenu from "./MobileMenu";
 import { NavMenu } from "./NavMenu";
 import NavAvatar from "./NavAvatar";
+import { Button } from "../ui/button";
 
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
@@ -23,7 +24,7 @@ export default function Navbar() {
   return (
     <nav
       className={cn(
-        "z-50 fixed top-0 flex items-center w-screen py-4 px-6 justify-between bg-background",
+        "z-50 fixed top-0 w-screen py-4 px-6 bg-background grid grid-cols-5 gap-2",
         scrolled && "border-b shadow-sm"
       )}
     >
@@ -35,7 +36,7 @@ export default function Navbar() {
       {/* 로고 */}
       <Link
         to='/'
-        className='md:flex items-center justify-center gap-x-2 shrink-0 select-none ml-[40px] md:ml-auto' // 아바타 크기만큼 ml
+        className='flex items-center gap-x-2 shrink-0 select-none md:justify-start justify-center md:col-span-1 col-span-3'
       >
         <img
           src='/awesome_ducky.png'
@@ -50,14 +51,19 @@ export default function Navbar() {
       </Link>
 
       {/* 메뉴 */}
-      <NavMenu className='hidden md:flex gap-x-5 mx-auto w-full justify-center text-xl' />
+      <NavMenu className='hidden md:flex gap-x-5 mx-auto w-full justify-center text-xl col-span-3' />
 
       <div className='justify-end flex items-center gap-x-2'>
         {/* 사용자 정보 */}
-        <NavAvatar user={user} />
+        {user && <NavAvatar user={user} />}
+        <Link to='/login'>
+          <Button size='sm' className='break-keep	whitespace-nowrap'>
+            Sign in
+          </Button>
+        </Link>
 
         {/* 테마 변경 버튼 */}
-        <ThemeToggle />
+        <ThemeToggle className='hidden md:flex' />
       </div>
     </nav>
   );

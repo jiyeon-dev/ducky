@@ -9,6 +9,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavMenu } from "@/components/Navbar/NavMenu";
 import { useState } from "react";
+import { ThemeToggle } from "./ThemeToggle";
 
 export default function MobileMenu() {
   const [open, setOpen] = useState(false);
@@ -20,6 +21,7 @@ export default function MobileMenu() {
           <Menu />
         </Button>
       </DrawerTrigger>
+
       <DrawerContent className='h-screen top-0 left-0 right-auto mt-0 w-full md:w-[400px] md:rounded-r-lg rounded-none'>
         <DrawerClose
           className='absolute right-0 top-0 mr-4 mt-4'
@@ -32,6 +34,10 @@ export default function MobileMenu() {
           setOpen={setOpen}
           className='my-auto space-y-4 flex flex-col mx-auto text-center text-3xl'
         />
+
+        <div className='absolute bottom-0 mb-10 flex justify-center w-full'>
+          <ThemeToggle />
+        </div>
       </DrawerContent>
     </Drawer>
   );

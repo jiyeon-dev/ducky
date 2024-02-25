@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { NavLink } from "react-router-dom";
 
 interface NavMenuProps {
-  className: string;
+  className?: string;
   setOpen?: (open: boolean) => void;
 }
 
