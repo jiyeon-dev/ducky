@@ -121,6 +121,7 @@ export const Description = ({ data, user }: DescriptionProps) => {
               "min-h-[78px] text-sm font-medium py-3 pr-3.5 rounded-md text-[var(--kanban-text)]",
               data.description ? "" : "bg-[var(--kanban-modal-btn)] pl-3.5"
             )}
+            style={{ wordBreak: "break-word" }}
             dangerouslySetInnerHTML={{
               __html: data.description || defaultMessage,
             }}

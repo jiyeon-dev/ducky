@@ -64,7 +64,7 @@ export const CardModal = () => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={onClose} modal={false}>
       <DialogContent
         className={
           "bg-[var(--kanban-modal-bg)] lg:max-w-screen-md h-screen md:h-[90vh] flex flex-col"
