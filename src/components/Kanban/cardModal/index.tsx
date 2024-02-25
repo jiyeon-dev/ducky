@@ -20,7 +20,6 @@ import { Header } from "./Header";
 import { Description } from "./description";
 import { Actions } from "./Actions";
 import { Activity } from "./Activity";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 
 interface QueryKey {
