@@ -13,19 +13,22 @@ import { useCardModal } from "@/hooks/useCardModal";
 import { ActivityLog, Card } from "@/types";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/useAuth";
-import { Dialog } from "@radix-ui/react-dialog";
-import { DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Drawer, DrawerClose, DrawerContent } from "@/components/ui/drawer";
+import { X } from "lucide-react";
 import { Header } from "./Header";
 import { Description } from "./description";
 import { Actions } from "./Actions";
 import { Activity } from "./Activity";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 interface QueryKey {
   id: string;
   listId: string;
 }
 
-export const CardModal = () => {
+export const CardModal = ({ isMobile = false }: { isMobile: boolean }) => {
   const user = useAuth();
   const id = useCardModal((state) => state.id);
   const listId = useCardModal((state) => state.listId);
@@ -63,48 +66,77 @@ export const CardModal = () => {
     }
   };
 
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose} modal={false}>
-      <DialogContent
-        className={
-          "bg-[var(--kanban-modal-bg)] lg:max-w-screen-md h-screen md:h-[90vh] flex flex-col"
-        }
-        onEscapeKeyDown={onEscapeKeyDown}
-      >
-        {result[0].isLoading ? (
-          <Header.Skeleton />
-        ) : (
-          <Header data={result[0].data || []} user={user} />
+  const content = (
+    <>
+      {result[0].isLoading ? (
+        <Header.Skeleton />
+      ) : (
+        <Header data={result[0].data || []} user={user} />
+      )}
+
+      <div
+        className={cn(
+          "grid grid-cols-1 md:gap-4 overflow-y-auto",
+          isMobile ? "grid-cols-1 h-full" : "md:grid-cols-4"
         )}
-        <div className='grid grid-cols-1 md:grid-cols-4 md:gap-4 overflow-y-auto'>
-          <div className={user ? "col-span-3" : "col-span-4"}>
-            <div className='w-full space-y-6 overflow-y-auto'>
-              {result[0].isLoading ? (
-                <Description.Skeleton />
-              ) : (
-                <Description data={result[0].data || []} user={user} />
-              )}
-              {result[1].isLoading || result[2].isLoading ? (
-                <Activity.Skeleton />
-              ) : (
-                <Activity
-                  items={(result[1].data as []) || []}
-                  comments={(result[2].data as []) || []}
-                />
-              )}
-            </div>
-          </div>
-          {user ? (
-            result[0].isLoading ? (
-              <Actions.Skeleton />
+      >
+        <div className={user ? "col-span-3" : "col-span-4"}>
+          <div className='w-full space-y-6 overflow-y-auto'>
+            {result[0].isLoading ? (
+              <Description.Skeleton />
             ) : (
-              <Actions data={result[0].data} />
-            )
-          ) : null}
+              <Description data={result[0].data || []} user={user} />
+            )}
+            {result[1].isLoading || result[2].isLoading ? (
+              <Activity.Skeleton />
+            ) : (
+              <Activity
+                items={(result[1].data as []) || []}
+                comments={(result[2].data as []) || []}
+              />
+            )}
+          </div>
         </div>
-      </DialogContent>
-    </Dialog>
+        {user ? (
+          result[0].isLoading ? (
+            <Actions.Skeleton />
+          ) : (
+            <Actions data={result[0].data} />
+          )
+        ) : null}
+      </div>
+    </>
   );
+
+  if (isMobile) {
+    return (
+      <Drawer open={isOpen} onClose={onClose}>
+        <DrawerContent className='h-screen top-0 left-0 right-auto mt-0 w-full rounded-none bg-[var(--kanban-modal-bg)]'>
+          <DrawerClose
+            className='absolute right-0 top-0 mr-4 mt-4'
+            onClick={onClose}
+          >
+            <X />
+          </DrawerClose>
+
+          <div className='p-8 h-full'>{content}</div>
+        </DrawerContent>
+      </Drawer>
+    );
+  } else {
+    return (
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent
+          className={
+            "bg-[var(--kanban-modal-bg)] lg:max-w-screen-md h-screen md:h-[90vh] flex flex-col"
+          }
+          onEscapeKeyDown={onEscapeKeyDown}
+        >
+          {content}
+        </DialogContent>
+      </Dialog>
+    );
+  }
 };
 
 const fetchCard = async ({ id, listId }: QueryKey) => {

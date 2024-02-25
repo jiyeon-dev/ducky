@@ -6,17 +6,24 @@ import { CardModal } from "@/components/Kanban/cardModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useQuery } from "@tanstack/react-query";
 import { useCardModal } from "@/hooks/useCardModal";
+import { useEffect, useState } from "react";
+import { checkIsMobile } from "@/lib/utils";
 
 interface QueryKey {
   boardId: string;
 }
 
 export default function StoragePage() {
+  const [isMobile, setIsMobile] = useState(false);
   const isOpen = useCardModal((state) => state.isOpen);
   const { data: lists, isLoading } = useQuery({
     queryKey: ["storage", { boardId: "ducky" }],
     queryFn: ({ queryKey }) => fetchData({ ...(queryKey[1] as QueryKey) }),
   });
+
+  useEffect(() => {
+    setIsMobile(checkIsMobile());
+  }, []);
 
   // const [lists, setLists] = useState<List[]>([]);
   // const [isLoading, setLoading] = useState<boolean>(false);
@@ -67,7 +74,7 @@ export default function StoragePage() {
         </div>
       </div>
 
-      {isOpen && <CardModal />}
+      {isOpen && <CardModal isMobile={isMobile} />}
     </>
   );
 }
