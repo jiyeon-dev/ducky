@@ -55,12 +55,15 @@ export default function Navbar() {
 
       <div className='justify-end flex items-center gap-x-2'>
         {/* 사용자 정보 */}
-        {user && <NavAvatar user={user} />}
-        <Link to='/login'>
-          <Button size='sm' className='break-keep	whitespace-nowrap'>
-            Sign in
-          </Button>
-        </Link>
+        {user ? (
+          <NavAvatar user={user} />
+        ) : (
+          <Link to='/login'>
+            <Button size='sm' className='break-keep	whitespace-nowrap'>
+              Sign in
+            </Button>
+          </Link>
+        )}
 
         {/* 테마 변경 버튼 */}
         <ThemeToggle className='hidden md:flex' />
