@@ -26,7 +26,7 @@ const MobileCategoryList = memo(() => {
 
   const handleChangePage = (url: string) => {
     setOpen(false);
-    navigate(url ? `/posts/${url}` : `/posts`);
+    navigate(url ? `/posts/category/${url}` : `/posts`);
   };
 
   return (

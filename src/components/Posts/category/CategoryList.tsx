@@ -23,7 +23,7 @@ const CategoryList = memo(() => {
             {data?.map((item) => (
               <NavLink
                 key={item.id}
-                to={item.id ? `/posts/${item.id}` : `/posts`}
+                to={item.id ? `/posts/category/${item.id}` : `/posts`}
                 className={({ isActive }) =>
                   isActive ? "underline" : undefined
                 }

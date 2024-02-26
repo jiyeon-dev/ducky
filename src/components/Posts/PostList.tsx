@@ -20,7 +20,7 @@ import { LoadingSpinner } from "../LoadingSpinner";
 
 export default function PostList() {
   const target = useRef<HTMLDivElement>(null);
-  const { id } = useParams();
+  const { categoryId } = useParams();
 
   const {
     data,
@@ -32,9 +32,12 @@ export default function PostList() {
     error,
   } = useInfiniteQuery({
     initialPageParam: undefined,
-    queryKey: ["posts", { category: id }],
+    queryKey: ["posts", { category: categoryId }],
     queryFn: async ({ pageParam }) => {
-      const querySnapshot = await getPostList(pageParam || undefined, id);
+      const querySnapshot = await getPostList(
+        pageParam || undefined,
+        categoryId
+      );
       return querySnapshot;
     },
     getNextPageParam: (querySnapshot) => {

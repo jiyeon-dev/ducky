@@ -11,6 +11,7 @@ import LoginPage from "./page/Login";
 import RegisterPage from "./page/Register";
 import PostsPage from "./page/Posts";
 import PostEditPage from "./page/PostEdit";
+import PostPage from "./page/Post";
 
 const router = createBrowserRouter([
   {
@@ -34,12 +35,16 @@ const router = createBrowserRouter([
             element: <PostsPage />,
           },
           {
-            path: ":id",
+            path: "new",
+            element: <PostEditPage />,
+          },
+          {
+            path: "category/:categoryId",
             element: <PostsPage />,
           },
           {
-            path: "new",
-            element: <PostEditPage />,
+            path: ":postId",
+            element: <PostPage />,
           },
         ],
       },

@@ -3,10 +3,19 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 
 export default function PostListItem({ data }: { data: Post }) {
+  const navigate = useNavigate();
+  const handleClickCard = () => {
+    navigate(`/posts/${data.id}`);
+  };
+
   return (
-    <Card className='flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 cursor-pointer p-4'>
+    <Card
+      className='flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 cursor-pointer p-4'
+      onClick={handleClickCard}
+    >
       {/* image */}
       <div
         className='bg-center bg-no-repeat bg-contain rounded-lg shrink-0 h-[200px] sm:h-[150px] w-full sm:w-[150px]'
