@@ -25,11 +25,11 @@ export const NavMenu = ({ className, setOpen }: NavMenuProps) => {
         <NavMenuTitle>Home</NavMenuTitle>
       </NavLink>
       <NavLink
-        to='/writing_ideas'
+        to='/posts'
         className={({ isActive }) => (isActive ? "underline" : undefined)}
         onClick={handleClose}
       >
-        <NavMenuTitle>Writing Ideas</NavMenuTitle>
+        <NavMenuTitle>Posts</NavMenuTitle>
       </NavLink>
       <NavLink
         to='storage'

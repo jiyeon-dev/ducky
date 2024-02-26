@@ -2,7 +2,7 @@ import CategoryList from "@/components/Posts/CategoryList";
 import MobileCategoryList from "@/components/Posts/MobileCategoryList";
 import PostList from "@/components/Posts/PostList";
 
-export default function WritingIdeasPage() {
+export default function PostsPage() {
   return (
     <>
       <div className='flex flex-col h-full overflow-y-auto'>

@@ -9,7 +9,7 @@ import { ThemeProvider } from "./hooks/useTheme";
 import StoragePage from "./page/Storage";
 import LoginPage from "./page/Login";
 import RegisterPage from "./page/Register";
-import WritingIdeasPage from "./page/WritingIdeas";
+import PostsPage from "./page/Posts";
 
 const router = createBrowserRouter([
   {
@@ -26,12 +26,12 @@ const router = createBrowserRouter([
         element: <StoragePage />,
       },
       {
-        path: "writing_ideas", // 글감 페이지
-        element: <WritingIdeasPage />,
+        path: "posts", // 글 페이지
+        element: <PostsPage />,
         children: [
           {
             path: ":id",
-            element: <WritingIdeasPage />,
+            element: <PostsPage />,
           },
         ],
       },
