@@ -1,16 +1,21 @@
+import { memo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { CheckIcon } from "lucide-react";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandItem,
-} from "../ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
-import { memo, useState } from "react";
 import { useQueryCategories } from "./CategoryList";
-import { useNavigate, useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import CategoryButtons from "./CategoryButtons";
 
 const MobileCategoryList = memo(() => {
   const navigate = useNavigate();
@@ -21,7 +26,7 @@ const MobileCategoryList = memo(() => {
 
   const handleChangePage = (url: string) => {
     setOpen(false);
-    navigate(url);
+    navigate(url ? `/posts/${url}` : `/posts`);
   };
 
   return (
@@ -66,11 +71,7 @@ const MobileCategoryList = memo(() => {
       </Popover>
 
       {/* 설정 */}
-      <div className='text-right'>
-        <Button variant='secondary' size='sm'>
-          글쓰기
-        </Button>
-      </div>
+      <CategoryButtons />
     </div>
   );
 });

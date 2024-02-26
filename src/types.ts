@@ -12,10 +12,14 @@ export type Category = {
 export type Post = {
   id: string;
   title: string;
+  content: string;
+  categoryId: string;
+  mainImageUrl?: string;
+  description: string;
+  tags: string[];
+  owner: Pick<User, "uid" | "displayName" | "photoURL">;
   createdAt: TimeStamp;
   updatedAt: TimeStamp;
-  mainImageUrl: string;
-  content: string;
 };
 
 export type Board = {

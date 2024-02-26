@@ -10,6 +10,7 @@ import StoragePage from "./page/Storage";
 import LoginPage from "./page/Login";
 import RegisterPage from "./page/Register";
 import PostsPage from "./page/Posts";
+import PostEditPage from "./page/PostEdit";
 
 const router = createBrowserRouter([
   {
@@ -27,11 +28,18 @@ const router = createBrowserRouter([
       },
       {
         path: "posts", // 글 페이지
-        element: <PostsPage />,
         children: [
+          {
+            index: true,
+            element: <PostsPage />,
+          },
           {
             path: ":id",
             element: <PostsPage />,
+          },
+          {
+            path: "new",
+            element: <PostEditPage />,
           },
         ],
       },

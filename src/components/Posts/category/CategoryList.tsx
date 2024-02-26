@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import { db } from "@/lib/firebase";
 import { Category } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
+import CategoryButtons from "./CategoryButtons";
 
 const CategoryList = memo(() => {
   const { data, isLoading } = useQueryCategories();
@@ -23,10 +23,11 @@ const CategoryList = memo(() => {
             {data?.map((item) => (
               <NavLink
                 key={item.id}
-                to={item.id}
+                to={item.id ? `/posts/${item.id}` : `/posts`}
                 className={({ isActive }) =>
                   isActive ? "underline" : undefined
                 }
+                end
               >
                 {item.name}
               </NavLink>
@@ -36,11 +37,7 @@ const CategoryList = memo(() => {
       </div>
 
       {/* 설정 */}
-      <div className='text-right'>
-        <Button variant='secondary' size='sm'>
-          글쓰기
-        </Button>
-      </div>
+      <CategoryButtons />
     </div>
   );
 });
@@ -55,7 +52,7 @@ const CategoryListSkeleton = () => {
   );
 };
 
-const fetchCategories = async () => {
+const fetchCategories = async (setAll: boolean) => {
   const q = query(collection(db, "category"), orderBy("order", "asc"));
   const querySnapshot = await getDocs(q);
   const categories = querySnapshot.docs.map(
@@ -65,14 +62,19 @@ const fetchCategories = async () => {
         ...item.data(),
       } as Category)
   );
-  categories.unshift({ name: "ALL", id: "" });
+  if (setAll) categories.unshift({ name: "ALL", id: "" });
   return categories;
 };
 
-export const useQueryCategories = () => {
+/**
+ * 카테고리 리스트 조회
+ * @param setAll All option 노출 여부
+ * @returns
+ */
+export const useQueryCategories = (setAll = true) => {
   return useQuery({
-    queryKey: ["category"],
-    queryFn: () => fetchCategories(),
+    queryKey: ["category", { setAll }],
+    queryFn: () => fetchCategories(setAll),
     staleTime: 60 * 60 * 1000, // 1시간동안은 같은 쿼리 실행해도 캐시에 저장된 데이터를 갖고오도록 함.
   });
 };
