@@ -70,7 +70,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         uid: user.uid,
       },
       // imageUrl,
-      mainImageUrl: imageUrl,
+      mainImageUrl: imageUrl || "",
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });

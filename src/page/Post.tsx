@@ -10,6 +10,8 @@ import { formatCreateAt } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import Editor from "@/components/Posts/Editor";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { DeleteModal } from "@/components/Posts/DeleteModal";
 
 interface QueryKey {
   postId: string;
@@ -23,10 +25,14 @@ export default function PostPage() {
     queryFn: ({ queryKey }) => fetchPost({ ...(queryKey[1] as QueryKey) }),
   });
 
+  if (isError) {
+    toast.error(error.message, { id: postId });
+  }
+
   return (
     <>
       {isLoading && <LoadingSpinner />}
-      {data && (
+      {data && postId && (
         <div className='flex flex-col h-full overflow-y-auto'>
           {/* image */}
           <div className='flex flex-col text-center w-full'>
@@ -58,7 +64,7 @@ export default function PostPage() {
                   <Button variant='ghost'>Back</Button>
                 </Link>
                 <Button>Edit</Button>
-                <Button variant='destructive'>Delete</Button>
+                <DeleteModal postId={postId} />
               </div>
             </div>
           </div>

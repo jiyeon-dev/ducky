@@ -13,7 +13,10 @@ export const LoadingSpinner = ({
   ...props
 }: LoadingSpinnerProps) => {
   return createPortal(
-    <div className='fixed top-0 z-50 flex flex-col justify-center w-screen h-screen items-center bg-black/80'>
+    <div
+      className='fixed top-0 flex flex-col justify-center w-screen h-screen items-center bg-black/80'
+      style={{ zIndex: "99" }}
+    >
       <img
         src='/spinner_ducky.png'
         width={size}

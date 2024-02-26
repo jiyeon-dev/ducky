@@ -13,7 +13,7 @@ export default function PostListItem({ data }: { data: Post }) {
 
   return (
     <Card
-      className='flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 cursor-pointer p-4'
+      className='flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 cursor-pointer p-4'
       onClick={handleClickCard}
     >
       {/* image */}

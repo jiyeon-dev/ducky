@@ -1,18 +1,20 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { createPost } from "@/actions/post/createPost";
+import { useAction } from "@/hooks/useAction";
 import Editor from "@/components/Posts/Editor";
 import FormCategory from "@/components/Posts/form/FormCategory";
 import FormTagsInput from "@/components/Posts/form/FormTagsInput";
 import FormTextarea from "@/components/Posts/form/FormTextarea";
 import { Button } from "@/components/ui/button";
-import { createPost } from "@/actions/post/createPost";
-import { toast } from "sonner";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { useAction } from "@/hooks/useAction";
-import { Link, useNavigate } from "react-router-dom";
 import { CoverImage } from "../CoverImage";
 
 export default function PageForm() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [category, setCategory] = useState<string | undefined>(undefined);
   const [tags, setTags] = useState<string[]>([]);
   const [content, setContent] = useState<string | undefined>(undefined);
@@ -24,6 +26,7 @@ export default function PageForm() {
   const { execute, fieldErrors, isLoading } = useAction(createPost, {
     onSuccess() {
       toast.success(`Post has been created`);
+      queryClient.removeQueries({ queryKey: ["posts"] });
       navigate("/posts");
     },
     onError: (error) => {
