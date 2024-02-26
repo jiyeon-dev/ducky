@@ -6,7 +6,7 @@ export type Category = {
   id: string;
   name: string;
   order?: number;
-  posts: Post[];
+  posts?: Post[];
 };
 
 export type Post = {

@@ -1,6 +1,7 @@
 import PostListItem from "./PostListItem";
 
 export default function PostList() {
+  console.log("=====");
   return (
     <div className='container h-full flex flex-col overflow-x-hidden relative space-y-4 mb-4'>
       {/* <PostListItem.Skeleton /> */}

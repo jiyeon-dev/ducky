@@ -1,4 +1,5 @@
-import CategoryList from "@/components/CategoryList";
+import CategoryList from "@/components/Posts/CategoryList";
+import MobileCategoryList from "@/components/Posts/MobileCategoryList";
 import PostList from "@/components/Posts/PostList";
 
 export default function WritingIdeasPage() {
@@ -6,16 +7,14 @@ export default function WritingIdeasPage() {
     <>
       <div className='flex flex-col h-full overflow-y-auto'>
         {/* Title */}
-        <div className='container flex items-center justify-center py-2 gap-2 sticky top-0 bg-background z-10'>
+        <div className='container flex flex-col items-center justify-center py-2 gap-2 sticky -top-0 bg-background z-10'>
           <div className='flex flex-col text-center'>
             <h1 className='sm:text-6xl text-4xl font-bold font-[TTHakgyoansimMulgyeolB]'>
               글
             </h1>
-            <span className='text-gray-500 text-sm mt-3 font-[GmarketSansMedium]'></span>
-            {/* <div className='flex flex-col justify-center text-xl p-4 space-y-2 '>
-              
-            </div> */}
           </div>
+          {/* mobile category */}
+          <MobileCategoryList />
         </div>
 
         {/* category */}
