@@ -74,7 +74,7 @@ export default function PostList() {
           <PostListItem key={doc.id} data={{ ...doc.data(), id: doc.id }} />
         ));
       })}
-      <div ref={target} />
+      {hasNextPage && <div ref={target} />}
     </div>
   );
 }
@@ -85,14 +85,9 @@ const getPostList = async (
 ): Promise<DocumentData> => {
   const conditions = [];
   if (id) conditions.push(where("categoryId", "==", id));
+  conditions.push(orderBy("createdAt", "desc")); // orderBy가 startAfter보다 앞에 있어야 함.
   if (pageParam) conditions.push(startAfter(pageParam));
-
-  const q = query(
-    collection(db, "posts"),
-    ...conditions,
-    orderBy("createdAt", "desc"),
-    limit(10)
-  );
+  const q = query(collection(db, "posts"), ...conditions, limit(10));
 
   const querySnapshot = await getDocs(q);
   return querySnapshot;
