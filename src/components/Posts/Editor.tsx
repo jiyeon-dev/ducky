@@ -5,9 +5,10 @@ import { toast } from "sonner";
 import { useTheme } from "@/hooks/useTheme";
 import { uploadImage } from "@/actions/uploadImage";
 import "@blocknote/react/style.css";
+import { cn } from "@/lib/utils";
 
 interface EditorProps {
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   initialContent?: string;
   editable?: boolean;
 }
@@ -19,9 +20,18 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
     editable,
     initialContent: initialContent ? JSON.parse(initialContent) : undefined,
     onEditorContentChange: (editor) => {
-      onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
+      if (onChange) onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
     },
     uploadFile: uploadImageToStore,
+    domAttributes: {
+      // Adds a class to all `blockContainer` elements.
+      blockContainer: {
+        class: !editable ? "bg-background" : "",
+      },
+      editor: {
+        class: !editable ? "bg-background" : "",
+      },
+    },
   });
 
   return (
@@ -29,7 +39,12 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
       <BlockNoteView
         editor={editor}
         theme={theme === "dark" ? "dark" : "light"}
-        className='min-h-96 bg-[var(--bn-colors-editor-background)] rounded-lg pt-4 dark:border-0 border'
+        className={cn(
+          "rounded-lg pt-4",
+          editable
+            ? "min-h-96 dark:border-0 border bg-[var(--bn-colors-editor-background)]"
+            : "min-h-96"
+        )}
       />
     </div>
   );

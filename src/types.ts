@@ -1,6 +1,6 @@
 import { User } from "firebase/auth";
 
-type TimeStamp = { seconds: number; nanoseconds: number };
+export type TimeStamp = { seconds: number; nanoseconds: number };
 
 export type Category = {
   id: string;
@@ -8,6 +8,8 @@ export type Category = {
   order?: number;
   posts?: Post[];
 };
+
+export type Owner = Pick<User, "uid" | "displayName" | "photoURL">;
 
 export type Post = {
   id: string;
@@ -17,7 +19,7 @@ export type Post = {
   mainImageUrl?: string;
   description: string;
   tags: string[];
-  owner: Pick<User, "uid" | "displayName" | "photoURL">;
+  owner: Owner;
   createdAt: TimeStamp;
   updatedAt: TimeStamp;
 };

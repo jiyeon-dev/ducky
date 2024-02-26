@@ -1,7 +1,6 @@
-import { format } from "date-fns";
-
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ActivityLog, Comment } from "@/types";
+import { formatCreateAt } from "@/lib/utils";
 
 interface ActivityItemProps {
   data: ActivityLog | Comment;
@@ -11,8 +10,7 @@ export const ActivityItem = ({ data }: ActivityItemProps) => {
   let createdAt;
   const timestamp = data.createdAt;
   if (timestamp) {
-    const date = new Date(timestamp.seconds * 1000);
-    createdAt = format(date, "MMM d, yyyy 'at' h:mm a");
+    createdAt = formatCreateAt(timestamp);
   }
 
   return (

@@ -54,7 +54,7 @@ export default function PageForm() {
         <CoverImage />
         <FormTextarea id='title' defaultValue={""} errors={fieldErrors} />
         <FormTextarea id='description' defaultValue={""} errors={fieldErrors} />
-        <Editor onChange={onContentChange} initialContent={content} />
+        <Editor editable onChange={onContentChange} initialContent={content} />
         <FormTagsInput tags={tags} setTags={setTags} />
         <div className='flex space-x-2 justify-center'>
           <Link to={".."}>

@@ -45,7 +45,7 @@ export const CoverImage = ({ url, preview }: CoverImageProps) => {
           className='object-cover w-full h-[35vh]'
         />
       )}
-      {!imageUrl && (
+      {!imageUrl && !preview && (
         <div className='flex justify-center h-full w-full items-center text-gray-400'>
           cover image
         </div>
