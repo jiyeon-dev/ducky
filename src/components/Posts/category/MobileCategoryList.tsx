@@ -20,7 +20,7 @@ import CategoryButtons from "./CategoryButtons";
 const MobileCategoryList = memo(() => {
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
-  const { id } = useParams();
+  const { categoryId } = useParams();
 
   const { data, isLoading } = useQueryCategories();
 
@@ -39,7 +39,11 @@ const MobileCategoryList = memo(() => {
               className='w-full justify-start'
               aria-expanded={open}
             >
-              {id ? <>{data?.find((item) => item.id === id)?.name}</> : "ALL"}
+              {categoryId ? (
+                <>{data?.find((item) => item.id === categoryId)?.name}</>
+              ) : (
+                "ALL"
+              )}
             </Button>
           </PopoverTrigger>
         </div>
@@ -60,7 +64,9 @@ const MobileCategoryList = memo(() => {
                     <CheckIcon
                       className={cn(
                         "ml-auto h-4 w-4",
-                        category.id === (id || "") ? "opacity-100" : "opacity-0"
+                        category.id === (categoryId || "")
+                          ? "opacity-100"
+                          : "opacity-0"
                       )}
                     />
                   </CommandItem>
