@@ -11,14 +11,17 @@ interface CoverImageProps {
 
 export const CoverImage = ({ url, preview }: CoverImageProps) => {
   const [imageUrl, setImageUrl] = useState<string | undefined>(url);
+  const [isImageChanged, setIsImageChanged] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
   const onRemove = () => {
     setImageUrl(undefined);
+    setIsImageChanged(true);
   };
 
   const onChange = () => {
     if (inputRef.current) {
-      inputRef.current.click();
+      inputRef.current.click(); // 이미지 파일 추가 팝업
     }
   };
 
@@ -28,6 +31,7 @@ export const CoverImage = ({ url, preview }: CoverImageProps) => {
       files && files.length > 0 ? URL.createObjectURL(files[0]) : undefined;
     if (!url) return;
     setImageUrl(url);
+    setIsImageChanged(true);
   };
 
   return (
@@ -53,6 +57,11 @@ export const CoverImage = ({ url, preview }: CoverImageProps) => {
 
       {!preview && (
         <div className='opacity-0 group-hover:opacity-100 absolute bottom-5 right-5 flex items-center gap-x-2'>
+          <input
+            type='hidden'
+            name='isImageChanged'
+            value={`${isImageChanged}`} // 이미지 변경 여부 저장
+          />
           <input
             ref={inputRef}
             type='file'

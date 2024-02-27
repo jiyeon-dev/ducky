@@ -10,6 +10,7 @@ import StoragePage from "./page/Storage";
 import LoginPage from "./page/Login";
 import RegisterPage from "./page/Register";
 import PostsPage from "./page/Posts";
+import PostCreatePage from "./page/PostCreate";
 import PostEditPage from "./page/PostEdit";
 import PostPage from "./page/Post";
 
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
           },
           {
             path: "new",
+            element: <PostCreatePage />,
+          },
+          {
+            path: "edit",
             element: <PostEditPage />,
           },
           {

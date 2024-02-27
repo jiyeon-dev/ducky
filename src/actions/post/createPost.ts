@@ -5,27 +5,13 @@ import { auth, db, storage } from "@/lib/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 // zod
-const CreatePost = z.object({
-  title: z.string().min(1, { message: "Title is required" }).max(100, {
-    message: "Title is too long. (max: 100)",
-  }),
-  description: z
-    .string()
-    .min(1, { message: "Description is required" })
-    .max(200, {
-      message: "Description is too long. (max: 200)",
-    }),
+export const CreatePost = z.object({
+  title: z.string().min(1).max(100),
+  description: z.string().min(1).max(200),
   content: z.string(),
-  // .min(1, {
-  //   message: "Content is required",
-  // }),
-  categoryId: z
-    .string({
-      required_error: "Category is required",
-    })
-    .min(1, {
-      message: "Category is required",
-    }),
+  categoryId: z.string().min(1, {
+    message: "Category is required",
+  }),
   tags: z.array(z.string()).optional(),
   mainImageFile: z.instanceof(File).optional(),
 });
@@ -54,8 +40,6 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       const upload = await uploadBytesResumable(storageRef, imageFile);
       imageUrl = await getDownloadURL(upload.ref);
     }
-
-    console.log(imageUrl);
 
     // 추가
     const docRef = await addDoc(collection(db, "posts"), {

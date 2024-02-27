@@ -18,7 +18,7 @@ export default function PostListItem({ data }: { data: Post }) {
     >
       {/* image */}
       <div
-        className='bg-center bg-no-repeat bg-contain rounded-lg shrink-0 h-[200px] sm:h-[150px] w-full sm:w-[150px]'
+        className='bg-center bg-no-repeat bg-cover rounded-lg shrink-0 h-[200px] sm:h-[150px] sm:w-[150px]'
         style={{
           backgroundImage: `url(${data.mainImageUrl || "/no-image.jpeg"})`,
         }}
@@ -26,7 +26,9 @@ export default function PostListItem({ data }: { data: Post }) {
 
       <div className='flex flex-col w-full sm:w-screen space-y-2 sm:space-y-1'>
         {/* category */}
-        <span className='text-gray-500 font-bold'>{data.categoryId}</span>
+        <span className='text-gray-500 font-bold capitalize'>
+          {data.categoryId}
+        </span>
 
         {/* title */}
         <h1 className='text-2xl font-bold line-clamp-2'>{data.title}</h1>

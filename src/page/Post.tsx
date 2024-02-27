@@ -63,7 +63,9 @@ export default function PostPage() {
                 <Link to={".."}>
                   <Button variant='ghost'>Back</Button>
                 </Link>
-                <Button>Edit</Button>
+                <Link to={`/posts/edit?postId=${postId}`}>
+                  <Button>Edit</Button>
+                </Link>
                 <DeleteModal postId={postId} />
               </div>
             </div>
@@ -74,7 +76,7 @@ export default function PostPage() {
   );
 }
 
-const fetchPost = async ({ postId }: QueryKey): Promise<Post> => {
+export const fetchPost = async ({ postId }: QueryKey): Promise<Post> => {
   try {
     if (!postId) return {} as Post;
     const docRef = doc(db, "posts", postId);
