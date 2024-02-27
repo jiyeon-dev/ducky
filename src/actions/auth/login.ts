@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { User, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  EmailAuthProvider,
+  User,
+  reauthenticateWithCredential,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { ActionState, fieldTypeChecker } from "@/lib/fieldTypeChecker";
 import { auth } from "@/lib/firebase";
@@ -25,6 +30,10 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password);
     user = response.user;
+
+    // 재 인증을 해야지 계정 삭제가 됨.
+    const authCredential = EmailAuthProvider.credential(email, password);
+    await reauthenticateWithCredential(user, authCredential);
   } catch (e) {
     /**
      * message => Firebase: Error (auth/email-already-in-use).
