@@ -12,12 +12,14 @@ import Editor from "@/components/Posts/Editor";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { DeleteModal } from "@/components/Posts/DeleteModal";
+import { useAuth } from "@/hooks/useAuth";
 
 interface QueryKey {
   postId: string;
 }
 
 export default function PostPage() {
+  const user = useAuth();
   const { postId } = useParams();
 
   const { data, isLoading, isError, error } = useQuery({
@@ -63,10 +65,15 @@ export default function PostPage() {
                 <Link to={".."}>
                   <Button variant='ghost'>Back</Button>
                 </Link>
-                <Link to={`/posts/edit?postId=${postId}`}>
-                  <Button>Edit</Button>
-                </Link>
-                <DeleteModal postId={postId} />
+                {/* 로그인한 사용자와 글쓴이가 같은 경우에만 활성화 */}
+                {user && user.uid === data?.owner.uid && (
+                  <>
+                    <Link to={`/posts/edit?postId=${postId}`}>
+                      <Button>Edit</Button>
+                    </Link>
+                    <DeleteModal postId={postId} />
+                  </>
+                )}
               </div>
             </div>
           </div>
