@@ -20,7 +20,7 @@ export default function NavAvatar({ user }: NavAvatarProps) {
 
   // 로그아웃
   const doLogout = () => {
-    logout();
+    logout(true);
     navigate("/login");
   };
 

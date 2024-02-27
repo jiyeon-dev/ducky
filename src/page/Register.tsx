@@ -20,7 +20,8 @@ export default function RegisterPage() {
   const navigate = useNavigate();
 
   const { execute, isLoading, fieldErrors } = useAction(createUser, {
-    onSuccess: () => {
+    onSuccess: (data) => {
+      toast.info(`Welcome ${data.displayName}!`, { id: "login" });
       navigate("/login");
     },
     onError(error) {

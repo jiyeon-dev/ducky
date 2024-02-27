@@ -19,11 +19,14 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   const { execute, isLoading, fieldErrors } = useAction(login, {
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setTimeout(() => {
+        toast.info(`Welcome ${data.displayName} 🎉`, { id: "login" });
+      }, 100);
       navigate("/");
     },
     onError(error) {
-      toast.error(error);
+      toast.error(error, { id: "login" });
     },
   });
 
