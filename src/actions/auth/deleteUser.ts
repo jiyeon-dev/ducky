@@ -3,7 +3,6 @@
  * https://firebase.google.com/docs/auth/admin/errors?hl=ko
  */
 import { z } from "zod";
-import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { ActionState, fieldTypeChecker } from "@/lib/fieldTypeChecker";
 import {

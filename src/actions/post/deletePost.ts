@@ -2,7 +2,6 @@ import { z } from "zod";
 import { ActionState, fieldTypeChecker } from "@/lib/fieldTypeChecker";
 import { auth, db } from "@/lib/firebase";
 import { doc, runTransaction } from "firebase/firestore";
-import { Post } from "@/types";
 
 // zod
 const DeletePost = z.object({
