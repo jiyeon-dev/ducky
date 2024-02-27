@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useCardModal } from "@/hooks/useCardModal";
 import { useEffect, useState } from "react";
 import { checkIsMobile } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface QueryKey {
   boardId: string;
@@ -16,10 +17,20 @@ interface QueryKey {
 export default function StoragePage() {
   const [isMobile, setIsMobile] = useState(false);
   const isOpen = useCardModal((state) => state.isOpen);
-  const { data: lists, isLoading } = useQuery({
+  const {
+    data: lists,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ["storage", { boardId: "ducky" }],
     queryFn: ({ queryKey }) => fetchData({ ...(queryKey[1] as QueryKey) }),
   });
+
+  if (isError) {
+    console.log(error);
+    toast.error(error.message);
+  }
 
   useEffect(() => {
     setIsMobile(checkIsMobile());
@@ -88,11 +99,15 @@ const fetchData = async ({ boardId }: QueryKey) => {
 
   const querySnapshot = await getDocs(q);
   const data = querySnapshot.docs.map((item) => {
-    const sortedCard = item
-      .data()
-      .cards.sort(
-        (a: { order: number }, b: { order: number }) => a.order - b.order
-      );
+    let sortedCard = [];
+    if (item.data().cards) {
+      sortedCard = item
+        .data()
+        .cards.sort(
+          (a: { order: number }, b: { order: number }) => a.order - b.order
+        );
+    }
+
     return { ...item.data(), cards: sortedCard, id: item.id } as List;
   });
   return data;

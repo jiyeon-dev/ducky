@@ -9,10 +9,12 @@ import { useAction } from "@/hooks/useAction";
 import { createList } from "@/actions/kanban/createList";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
 
 const BOARD_ID = import.meta.env.VITE_KANBAN_BOARD_ID;
 
 export const AddListForm = () => {
+  const queryClient = useQueryClient();
   const { boardId = BOARD_ID } = useParams();
   const formRef = useRef<ElementRef<"form">>(null);
   const inputRef = useRef<ElementRef<"input">>(null);
@@ -39,6 +41,7 @@ export const AddListForm = () => {
   const { execute, fieldErrors } = useAction(createList, {
     onSuccess: (data) => {
       toast.success(`List "${data.title}" created`);
+      queryClient.invalidateQueries({ queryKey: ["storage"] });
       disableEditing();
     },
     onError: (error) => {

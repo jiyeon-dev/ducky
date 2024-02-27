@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { updateListOrder } from "@/actions/kanban/updateListOrder";
 import { updateCardOrder } from "@/actions/kanban/updateCardOrder";
 import { useAuth } from "@/hooks/useAuth";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface KanbanProps {
   data: List[];
@@ -23,6 +24,7 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number) {
 }
 
 export default function Kanban({ data, boardId }: KanbanProps) {
+  const queryClient = useQueryClient();
   const user = useAuth();
   const [orderedData, setOrderedData] = useState(data); // db 저장 전 저장해서 보여주기 위해 생성
 
@@ -33,6 +35,7 @@ export default function Kanban({ data, boardId }: KanbanProps) {
   const { execute: executeUpdateListOrder } = useAction(updateListOrder, {
     onSuccess: () => {
       toast.success("List reordered.");
+      queryClient.invalidateQueries({ queryKey: ["storage"] });
     },
     onError: (error) => {
       toast.error(error);
@@ -42,6 +45,7 @@ export default function Kanban({ data, boardId }: KanbanProps) {
   const { execute: executeUpdateCardOrder } = useAction(updateCardOrder, {
     onSuccess: () => {
       toast.success("Card reordered.");
+      queryClient.invalidateQueries({ queryKey: ["storage"] });
     },
     onError: (error) => {
       toast.error(error);

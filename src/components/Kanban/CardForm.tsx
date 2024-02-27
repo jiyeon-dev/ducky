@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import { FormSubmit } from "./form/formSubmit";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CardFormProps {
   listId: string;
@@ -24,6 +25,7 @@ export const CardForm = ({
   isEditing,
   onListScrollToBottom,
 }: CardFormProps) => {
+  const queryClient = useQueryClient();
   const formRef = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const location = useLocation();
@@ -36,7 +38,8 @@ export const CardForm = ({
 
   const { execute, fieldErrors } = useAction(createCard, {
     onSuccess: (data) => {
-      toast.success(`Card "${data.title}" created`);
+      toast.success(`Card "${data?.title}" created`);
+      queryClient.invalidateQueries({ queryKey: ["storage"] });
       formRef.current?.reset();
       disableEditing();
     },

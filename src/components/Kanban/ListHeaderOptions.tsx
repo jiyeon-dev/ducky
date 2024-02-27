@@ -1,6 +1,7 @@
 import { toast } from "sonner";
 import { MoreHorizontal, X } from "lucide-react";
 import { useRef } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Popover,
   PopoverContent,
@@ -23,12 +24,14 @@ export const ListHeaderOptions = ({
   data,
   onAddCard,
 }: ListHeaderOptionsProps) => {
+  const queryClient = useQueryClient();
   const closeRef = useRef<HTMLButtonElement>(null);
   const { id, title, boardId } = data;
 
   const { execute: executeCopy } = useAction(copyList, {
     onSuccess: (data) => {
       toast.success(`List "${data.title}" copied`);
+      queryClient.invalidateQueries({ queryKey: ["storage"] });
       closeRef.current?.click();
     },
     onError: (error) => {
@@ -39,6 +42,7 @@ export const ListHeaderOptions = ({
   const { execute: executeDelete } = useAction(deleteList, {
     onSuccess: () => {
       toast.success(`List "${title}" deleted`);
+      queryClient.invalidateQueries({ queryKey: ["storage"] });
       closeRef.current?.click();
     },
     onError: (error) => {

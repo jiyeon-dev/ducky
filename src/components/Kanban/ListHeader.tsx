@@ -8,6 +8,7 @@ import { List } from "@/types";
 import { FormInput } from "@/components/Kanban/form/formInput";
 import { ListHeaderOptions } from "./ListHeaderOptions";
 import { useAuth } from "@/hooks/useAuth";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ListHeaderProps {
   data: List;
@@ -16,6 +17,7 @@ interface ListHeaderProps {
 
 export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
   const user = useAuth();
+  const queryClient = useQueryClient();
   const [title, setTitle] = useState(data.title);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -36,6 +38,7 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
   const { execute } = useAction(updateList, {
     onSuccess: (data) => {
       toast.success(`Renamed to "${data.title}"`);
+      queryClient.invalidateQueries({ queryKey: ["storage"] });
       setTitle(data.title);
       disableEditing();
     },
